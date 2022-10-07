@@ -1,5 +1,7 @@
 package Entidades;
 
+import Tablero.*;
+
 public class Manzana extends Comida{
 	public Manzana() {
 		incrementarTamaño = 3;

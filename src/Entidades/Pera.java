@@ -1,5 +1,7 @@
 package Entidades;
 
+import Tablero.*;
+
 public class Pera extends Comida{
 	public Pera() {
 		incrementarTamaño = 1;

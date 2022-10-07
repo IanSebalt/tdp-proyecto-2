@@ -1,5 +1,7 @@
 package Entidades;
 
+import Tablero.*;
+
 public class PowerUp2 extends PowerUp{
 	
 	public PowerUp2() {
