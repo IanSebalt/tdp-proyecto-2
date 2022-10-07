@@ -15,6 +15,6 @@ public class PowerUp1 extends PowerUp{
 	}
 	
 	public void accept(Visitor v) {
-		v.visit(this);		
+		v.chocar(this);		
 	}
 }

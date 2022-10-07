@@ -10,6 +10,7 @@ public class Jugador implements Serializable{
 	
 	public Jugador(String nom) {
 		nombre = nom;
+		puntos = 0;
 	}
 	
 	public void sumarPuntos(int punt) {

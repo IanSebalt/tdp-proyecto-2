@@ -27,8 +27,14 @@ public class Juego {
 		//TODO: Implementar.
 	}
 	
+	
+	/**
+	 * Método crear jugador con el nombre recibido por la ventana y se le asigna una puntuación inicial.
+	 */
 	public void crearJugador() {
-		//TODO: Implementar.
+		String nombre = miVentana.pedirNombre();
+		miJugador = new Jugador(nombre);
+		miJugador.sumarPuntos(puntajeActual);
 	}
 	
 	private void modificarRanking(Jugador j) {
