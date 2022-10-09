@@ -1,12 +1,16 @@
 package Juego;
 
 import GUI.Ventana;
+import Tablero.Coordenada;
+import Tablero.Tablero;
 
 public class Juego {
+	
 	protected int puntajeActual;
 	protected Reloj miReloj;
 	protected Jugador miJugador;
 	protected Ventana miVentana;
+	protected Tablero miTablero;
 	
 	public Juego(Ventana v, Reloj r) {
 		miReloj = r;
@@ -29,7 +33,7 @@ public class Juego {
 	
 	
 	/**
-	 * Método crear jugador con el nombre recibido por la ventana y se le asigna una puntuación inicial.
+	 * Método crear jugador con el nombre recibido por la ventana y que se le asigna una puntuación inicial.
 	 */
 	public void crearJugador() {
 		String nombre = miVentana.pedirNombre();
@@ -42,7 +46,13 @@ public class Juego {
 	}
 	
 	public void generarNivel(int nivel) {
-		//TODO: Implementar.
+		Coordenada paredes [] = null;
+		int powerUps = 0;
+		int Alimentos = 0;
+		//TODO: Implementar carga nivel mediante la lectura de un archivo de texto.
+		miTablero.establecerComida(Alimentos);
+		miTablero.establecerPowerUp(powerUps);
+		miTablero.generarParedes(paredes);
 	}
 	
 	public Jugador[] darRanking() {

@@ -2,9 +2,12 @@ package GUI;
 
 import java.awt.event.KeyEvent;
 
+import javax.swing.JFrame;
+
 import Juego.*;
 
-public class Ventana {
+public class Ventana extends JFrame {
+	
 	protected Juego miJuego;
 	
 	public String pedirNombre() {
