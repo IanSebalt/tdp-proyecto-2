@@ -1,8 +1,11 @@
 package Tablero;
 
+import java.util.concurrent.ThreadLocalRandom;
+import Entidades.*;
+
 import Juego.Juego;
 
-public class Tablero {
+public class Tablero implements VisitorBloque{
 	
 	protected int comida;
 	
@@ -18,6 +21,10 @@ public class Tablero {
 	
 	protected int cantColumnas;
 	
+	protected boolean generarAlimento;
+	
+	protected boolean generarPowerUp;
+	
 	public Tablero(Juego mj, int cf, int cC) {
 		this.cantFilas = cf;
 		this.cantColumnas = cC;
@@ -26,15 +33,13 @@ public class Tablero {
 		this.miJuego = mj;
 		this.matriz = new Bloque[cantColumnas][cantFilas];
 		//El tablero se crea con las cuatro paredes principales que limítan el área de juego,
-		for(int i=0;i<cantFilas;i++) {
-			for(int j=0;j<cantColumnas;j++)
-				matriz[i][j] = new BloqueIntransitable(i,j);
-			i = cantFilas-2;
+		for(int i = 0; i < cantColumnas; i++) {
+			matriz[0][i] = new BloqueIntransitable(0, i);
+			matriz[cantFilas - 1][i] = new BloqueIntransitable(cantFilas -1, i);
 		}
-		for(int j=0;j<cantFilas;j++) {
-			for(int i=1;i<cantColumnas-1;i++)
-				matriz[i][j] = new BloqueIntransitable(i,j);
-			j = cantColumnas-2;
+		for(int i = 1; i < cantFilas - 1; i++) {
+			matriz[i][0] = new BloqueIntransitable(i, 0);
+			matriz[i][cantColumnas - 1] = new BloqueIntransitable(i, cantColumnas - 1);
 		}
 	}
 	
@@ -55,15 +60,60 @@ public class Tablero {
 		}
 	}
 	
+	public boolean visitarBloque(BloqueTransitable b) {
+		if(generarAlimento) {
+			int randomAlim = ThreadLocalRandom.current().nextInt(1, 6);
+			if(randomAlim == 1)
+				b.establecerEntidad(new Banana());
+			else if (randomAlim == 2)
+					  b.establecerEntidad(new Manzana());
+				 else if(randomAlim == 3)
+					 	  b.establecerEntidad(new Naranja());
+				 	  else if(randomAlim == 4)
+				 		  	   b.establecerEntidad(new Pera());
+				 	  	   else b.establecerEntidad(new Sandia()); 
+			generarAlimento = false;
+		}
+		if(generarPowerUp) {
+			int randomPowerUp = ThreadLocalRandom.current().nextInt(1, 4);
+			if(randomPowerUp == 1)
+				b.establecerEntidad(new PowerUp1());
+			else if(randomPowerUp == 2)
+					 b.establecerEntidad(new PowerUp2());
+				 else b.establecerEntidad(new PowerUp3());
+			generarPowerUp = false;
+		}
+		return true;
+	}
+	
+	public boolean visitarBloque(BloqueIntransitable b) {
+		return false;
+	}
+	
 	public void generarAlimento() {
-		//TODO: implementar
+		int randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
+		int randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+		generarAlimento = true;
+		while(!matriz[randomX][randomY].accept(this)) {
+			randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
+			randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+		}
+		
 	}
 	
 	public void generarPowerUp() {
-		//TODO: implementar
+		int randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
+		int randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+		generarPowerUp = true;
+		while(!matriz[randomX][randomY].accept(this)) {
+			randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
+			randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+		}
 	}
 	
-	public void actualizarBloque(int x, int y) {
-		//TODO: implementar
+	public void actualizarBloque(Coordenada cord) {
+		if(matriz[cord.getX()][cord.getY()].accept(this))
+			matriz[cord.getX()][cord.getY()] = new BloqueIntransitable(cord.getX(),cord.getY());
+		miJuego.actualizarVentana(cord, matriz[cord.getX()][cord.getY()].getBloqueGrafico().getImagen());
 	}
 }

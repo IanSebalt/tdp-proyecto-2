@@ -3,9 +3,11 @@ package Tablero;
 import GUI.*;
 
 public abstract class Bloque {
-	protected int x;
-	protected int y;
+	protected Coordenada cord;
 	protected BloqueGrafico miBloqueGrafico;
 	
-	public abstract void accept(Visitor v);
+	public abstract boolean accept(VisitorBloque v);
+	public BloqueGrafico getBloqueGrafico() {
+		return miBloqueGrafico;
+	}
 }

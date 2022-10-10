@@ -11,7 +11,7 @@ import Entidades.PowerUp2;
 import Entidades.PowerUp3;
 import Entidades.Sandia;
 
-public class Serpiente implements Visitor{
+public class Serpiente implements VisitorEntidad{
 	
 	protected char direccion;
 
@@ -94,18 +94,6 @@ public class Serpiente implements Visitor{
 
 	@Override
 	public void chocar(Serpiente ser) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void chocar(BloqueTransitable b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void chocar(BloqueIntransitable b) {
 		// TODO Auto-generated method stub
 		
 	}

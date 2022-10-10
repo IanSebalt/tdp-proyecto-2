@@ -19,6 +19,10 @@ public class BloqueGrafico {
 		this.grafico.setImage(imageIcon.getImage());
 	}
 	
+	public String getImagen() {
+		return imagen;
+	}
+	
 	public void actualizar() {
 		//TODO: Implementar.
 	}

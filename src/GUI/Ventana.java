@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 
 import Juego.*;
+import Tablero.Coordenada;
 
 public class Ventana extends JFrame {
 	
@@ -27,7 +28,7 @@ public class Ventana extends JFrame {
 		//TODO: Implementar.
 	}
 	
-	public void actualizarGrafica(int x, int y) {
+	public void actualizarGrafica(Coordenada cord, String img) {
 		//TODO: Implementar.
 	}
 }

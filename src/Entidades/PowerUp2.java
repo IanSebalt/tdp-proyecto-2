@@ -10,7 +10,7 @@ public class PowerUp2 extends PowerUp{
 		//FALTA IMAGEN
 		
 	}
-	public void accept(Visitor v) {
+	public void accept(VisitorEntidad v) {
 		v.chocar(this);
 	}
 	public String modificarEstetica() {

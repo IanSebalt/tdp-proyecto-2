@@ -63,4 +63,8 @@ public class Juego {
 	public void cambiarNivel() {
 		//TODO: Implementar.
 	}
+	
+	public void actualizarVentana(Coordenada cord, String img) {
+		miVentana.actualizarGrafica(cord, img);
+	}
 }

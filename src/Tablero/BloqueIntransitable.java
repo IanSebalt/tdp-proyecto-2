@@ -2,11 +2,10 @@ package Tablero;
 
 public class BloqueIntransitable extends Bloque{
 	public BloqueIntransitable(int x, int y) {
-		super.x = x;
-		super.y = y;
+		super.cord = new Coordenada(x, y);
 	}
 	
-	public void accept(Visitor v) {
-		//TODO: Implementar.
+	public boolean accept(VisitorBloque v) {
+		return v.visitarBloque(this);
 	}
 }

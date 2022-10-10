@@ -9,7 +9,7 @@ public class Manzana extends Comida{
 		//Falta Imagen
 	}
 	
-	public void accept(Visitor v) {
+	public void accept(VisitorEntidad v) {
 		v.chocar(this);
 	}
 }

@@ -14,7 +14,7 @@ public class PowerUp1 extends PowerUp{
 		return //Parte del arreglo de imagenes
 	}
 	
-	public void accept(Visitor v) {
+	public void accept(VisitorEntidad v) {
 		v.chocar(this);		
 	}
 }
