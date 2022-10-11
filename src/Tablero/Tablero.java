@@ -116,4 +116,8 @@ public class Tablero implements VisitorBloque{
 			matriz[cord.getX()][cord.getY()] = new BloqueIntransitable(cord.getX(),cord.getY());
 		miJuego.actualizarVentana(cord, matriz[cord.getX()][cord.getY()].getBloqueGrafico().getImagen());
 	}
+	
+	public void IncrementarPuntaje(int punt) {
+		miJuego.IncrementarPuntaje(punt);
+	}
 }

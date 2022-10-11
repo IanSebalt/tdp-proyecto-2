@@ -67,4 +67,8 @@ public class Juego {
 	public void actualizarVentana(Coordenada cord, String img) {
 		miVentana.actualizarGrafica(cord, img);
 	}
+	
+	public void IncrementarPuntaje(int punt) {
+		puntajeActual += punt;
+	}
 }

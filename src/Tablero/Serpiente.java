@@ -1,5 +1,6 @@
 package Tablero;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import Entidades.Banana;
@@ -10,6 +11,7 @@ import Entidades.PowerUp1;
 import Entidades.PowerUp2;
 import Entidades.PowerUp3;
 import Entidades.Sandia;
+import GUI.BloqueGrafico;
 
 public class Serpiente implements VisitorEntidad{
 	
@@ -46,20 +48,44 @@ public class Serpiente implements VisitorEntidad{
 
 	@Override
 	public void chocar(PowerUp1 p) {
-		// TODO Auto-generated method stub
-		
+		miTablero.IncrementarPuntaje(p.getPuntaje());
+		BloqueGrafico cabezaGraf = cabeza().getBloqueGrafico();
+		String[] arr = p.modificarEstetica();
+		cabezaGraf.cambiarImagen(arr[0]);
+		Iterator<Bloque> it = cuerpo.iterator();
+		while(it.hasNext()) {
+			Bloque aux = it.next();
+			aux.getBloqueGrafico().cambiarImagen(arr[1]);
+		}		
+		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(PowerUp2 p) {
-		// TODO Auto-generated method stub
-		
+		miTablero.IncrementarPuntaje(p.getPuntaje());
+		BloqueGrafico cabezaGraf = cabeza().getBloqueGrafico();
+		String[] arr = p.modificarEstetica();
+		cabezaGraf.cambiarImagen(arr[0]);
+		Iterator<Bloque> it = cuerpo.iterator();
+		while(it.hasNext()) {
+			Bloque aux = it.next();
+			aux.getBloqueGrafico().cambiarImagen(arr[1]);
+		}
+		//Falta aumentar tamaño		
 	}
 
 	@Override
 	public void chocar(PowerUp3 p) {
-		// TODO Auto-generated method stub
-		
+		miTablero.IncrementarPuntaje(p.getPuntaje());
+		BloqueGrafico cabezaGraf = cabeza().getBloqueGrafico();
+		String[] arr = p.modificarEstetica();
+		cabezaGraf.cambiarImagen(arr[0]);
+		Iterator<Bloque> it = cuerpo.iterator();
+		while(it.hasNext()) {
+			Bloque aux = it.next();
+			aux.getBloqueGrafico().cambiarImagen(arr[1]);
+		}
+		//Falta aumentar tamaño		
 	}
 
 	@Override
@@ -94,7 +120,7 @@ public class Serpiente implements VisitorEntidad{
 
 	@Override
 	public void chocar(Serpiente ser) {
-		// TODO Auto-generated method stub
-		
+				
 	}
+	
 }
