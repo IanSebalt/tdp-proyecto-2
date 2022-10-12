@@ -90,31 +90,31 @@ public class Serpiente implements VisitorEntidad{
 
 	@Override
 	public void chocar(Pera a) {
-		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		miTablero.IncrementarPuntaje(a.getPuntaje());
 		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(Manzana a) {
-		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		miTablero.IncrementarPuntaje(a.getPuntaje());
 		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(Banana a) {
-		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		miTablero.IncrementarPuntaje(a.getPuntaje());
 		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(Naranja a) {
-		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		miTablero.IncrementarPuntaje(a.getPuntaje());
 		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(Sandia a) {
-		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		miTablero.IncrementarPuntaje(a.getPuntaje());
 		//Falta aumentar tamaño	
 	}
 
