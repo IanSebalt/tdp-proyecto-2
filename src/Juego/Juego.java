@@ -1,8 +1,7 @@
 package Juego;
 
 import GUI.Ventana;
-import Tablero.Coordenada;
-import Tablero.Tablero;
+import Tablero.*;
 
 public class Juego {
 	
@@ -17,6 +16,11 @@ public class Juego {
 		miVentana = v;
 		puntajeActual = 0;
 		miJugador = null;
+	}
+	
+	public void iniciarJuego(int largo, int ancho) {
+		miTablero = new Tablero(this, largo, ancho);
+		generarNivel(1);
 	}
 	
 	public void gameOver() {
@@ -70,5 +74,9 @@ public class Juego {
 	
 	public void IncrementarPuntaje(int punt) {
 		puntajeActual += punt;
+	}
+	
+	public Bloque[][] getTablero(){
+		return miTablero.getMatriz();
 	}
 }

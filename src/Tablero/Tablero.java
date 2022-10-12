@@ -41,6 +41,9 @@ public class Tablero implements VisitorBloque{
 			matriz[i][0] = new BloqueIntransitable(i, 0);
 			matriz[i][cantColumnas - 1] = new BloqueIntransitable(i, cantColumnas - 1);
 		}
+		for(int i = 1; i < cantFilas - 1; i++)
+			for(int j = 1; j < cantColumnas - 1; j++)
+				matriz[i][j] = new BloqueTransitable(i, j);
 	}
 	
 	public void establecerComida(int com) {
@@ -119,5 +122,9 @@ public class Tablero implements VisitorBloque{
 	
 	public void IncrementarPuntaje(int punt) {
 		miJuego.IncrementarPuntaje(punt);
+	}
+	
+	public Bloque[][] getMatriz(){
+		return matriz;
 	}
 }

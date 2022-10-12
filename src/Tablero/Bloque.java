@@ -7,6 +7,7 @@ public abstract class Bloque {
 	protected BloqueGrafico miBloqueGrafico;
 	
 	public abstract boolean accept(VisitorBloque v);
+	
 	public BloqueGrafico getBloqueGrafico() {
 		return miBloqueGrafico;
 	}
