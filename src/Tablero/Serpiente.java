@@ -90,32 +90,32 @@ public class Serpiente implements VisitorEntidad{
 
 	@Override
 	public void chocar(Pera a) {
-		// TODO Auto-generated method stub
-		
+		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(Manzana a) {
-		// TODO Auto-generated method stub
-		
+		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(Banana a) {
-		// TODO Auto-generated method stub
-		
+		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(Naranja a) {
-		// TODO Auto-generated method stub
-		
+		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		//Falta aumentar tamaño	
 	}
 
 	@Override
 	public void chocar(Sandia a) {
-		// TODO Auto-generated method stub
-		
+		miTablero.IncrementarPuntaje(a.getIncrementarTamaño());
+		//Falta aumentar tamaño	
 	}
 
 	@Override
