@@ -20,4 +20,8 @@ public class BloqueTransitable extends Bloque{
 	public void establecerEntidad(Entidad e) {
 		entidad = e;
 	}
+	
+	public boolean acceptMover(VisitorBloque v) {
+		return v.visitarBloqueMover(this);
+	}
 }

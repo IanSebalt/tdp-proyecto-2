@@ -11,4 +11,14 @@ public abstract class Bloque {
 	public BloqueGrafico getBloqueGrafico() {
 		return miBloqueGrafico;
 	}
+	
+	public Coordenada getCoord() {
+		return cord;
+	}
+	
+	public void setBloqueGrafico(BloqueGrafico bg) {
+		miBloqueGrafico = bg;
+	}
+
+	public abstract boolean acceptMover(VisitorBloque v);
 }

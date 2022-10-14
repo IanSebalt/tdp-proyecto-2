@@ -37,11 +37,42 @@ public class Serpiente implements VisitorEntidad{
 		
 	}
 	
-	public int mover(char direccion) {
-		//TODO: Implementar.
-		return 0;
+	public void mover(char d) {
+		if( (d != direccion) || (direccion == 'u' && d != 'd') || (direccion == 'l' && d != 'r') || (direccion == 'r' && d != 'l') || direccion == 'u' && d != 'd' ) {
+			if(miTablero.mePuedoMover(cabeza(), d)) {
+				direccion = d;
+				Bloque cabezaAnt = cabeza();
+				Bloque nuevaCab = cuerpo.removeLast();
+				cuerpo.addFirst(nuevaCab);
+				miTablero.crearBloqueTransitable(nuevaCab.getCoord());
+				if(d == 'd') {
+					nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY() - 1);
+					nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX());
+					BloqueGrafico bg = nuevaCab.getBloqueGrafico();
+					nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
+					cabezaAnt.setBloqueGrafico(bg);
+				} else if(d == 'u') {
+					nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY() + 1);
+					nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX());
+					BloqueGrafico bg = nuevaCab.getBloqueGrafico();
+					nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
+					cabezaAnt.setBloqueGrafico(bg);
+				} else if(d == 'l') {
+					nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY());
+					nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX() - 1);
+					BloqueGrafico bg = nuevaCab.getBloqueGrafico();
+					nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
+					cabezaAnt.setBloqueGrafico(bg);
+				} else {
+					nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY());
+					nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX() + 1);
+					BloqueGrafico bg = nuevaCab.getBloqueGrafico();
+					nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
+					cabezaAnt.setBloqueGrafico(bg);
+				}				
+			}
+		}		
 	}
-	
 	public Bloque cabeza() {
 		return cuerpo.getFirst();
 	}

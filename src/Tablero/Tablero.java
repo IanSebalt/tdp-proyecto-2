@@ -167,4 +167,41 @@ public class Tablero implements VisitorBloque{
 	public int getPowerUp() {
 		return powerUp;
 	}
+	
+	public boolean visitarBloqueMover(BloqueIntransitable b) {
+		miJuego.gameOver();
+		return false;
+	}
+	
+	public boolean visitarBloqueMover(BloqueTransitable b) {
+		return true;
+	}
+	
+	
+	
+	public boolean mePuedoMover(Bloque b, char direccion) {
+		boolean toReturn = true;
+		if(direccion == 'd') {
+			Coordenada coord = b.getCoord();
+			coord.setY(coord.getY() - 1);
+			toReturn = (matriz[coord.getX()][coord.getY()].acceptMover(this));
+		} else if(direccion == 'u') {
+			Coordenada coord = b.getCoord();
+			coord.setY(coord.getY() + 1);
+			toReturn = (matriz[coord.getX()][coord.getY()].acceptMover(this));
+		} else if(direccion == 'l') {
+			Coordenada coord = b.getCoord();
+			coord.setX(coord.getX() - 1);
+			toReturn = (matriz[coord.getX()][coord.getY()].acceptMover(this));
+		} else if(direccion == 'l') {
+			Coordenada coord = b.getCoord();
+			coord.setX(coord.getX() + 1);
+			toReturn = (matriz[coord.getX()][coord.getY()].acceptMover(this));
+		}
+		return toReturn;
+	}
+	
+	public void crearBloqueTransitable(Coordenada c) {
+		matriz[c.getX()][c.getY()] = new BloqueTransitable(c.getX(), c.getY());
+	}
 }
