@@ -28,4 +28,8 @@ public class PowerUp1 extends PowerUp{
 	public int getTamañoAIncrementar() {
 		return incrementarTamaño;
 	}
+	
+	public String getImg() {
+		return img;
+	}
 }

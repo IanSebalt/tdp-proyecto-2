@@ -46,15 +46,16 @@ public class Juego {
 	}
 	
 	public void gameOver() {
-		//TODO: Implementar.
+		miVentana.terminarPartida();
 	}
 	
 	public void girar(char dir) {
-		//TODO: Implementar.
+		miSerpiente.setDireccion(dir);
+		miSerpiente.mover(dir);
 	}
 	
 	public void mover() {
-		//TODO: Implementar.
+		miSerpiente.mover(miSerpiente.getDireccion());
 	}
 	
 	
@@ -150,7 +151,7 @@ public class Juego {
 		Coordenada achicarArreglo [] = new Coordenada [cantElementos];
 		for(int i=0; i<cantElementos;i++)
 			achicarArreglo[i] = paredes[i];
-		paredes = achicarArreglo;			
+		paredes = achicarArreglo;
 		miTablero.establecerComida(Alimentos);
 		miTablero.establecerPowerUp(powerUps);
 		miTablero.generarParedes(paredes);
@@ -201,8 +202,8 @@ public class Juego {
 	 * @param cord - coordenadas del bloque a actualizar.
 	 * @param img - nueva imagen para actualizar el bloque.
 	 */
-	public void actualizarVentana(Coordenada cord, String img) {
-		miVentana.actualizarGrafica(cord, img);
+	public void actualizarVentana(Coordenada cord) {
+		miVentana.actualizarGrafica(cord);
 	}
 	
 	/**
@@ -255,5 +256,9 @@ public class Juego {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}				
+	}	
+	
+	public int getPuntaje() {
+		return puntajeActual;
+	}
 }

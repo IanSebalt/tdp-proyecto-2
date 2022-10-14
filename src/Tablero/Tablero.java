@@ -5,7 +5,7 @@ import Entidades.*;
 
 import Juego.Juego;
 
-public class Tablero implements VisitorBloque{
+public class Tablero{
 	
 	protected int comida;
 	
@@ -34,16 +34,16 @@ public class Tablero implements VisitorBloque{
 		this.matriz = new Bloque[cantColumnas][cantFilas];
 		//El tablero se crea con las cuatro paredes principales que limítan el área de juego,
 		for(int i = 0; i < cantColumnas; i++) {
-			matriz[0][i] = new BloqueIntransitable(0, i);
-			matriz[cantFilas - 1][i] = new BloqueIntransitable(cantFilas -1, i);
+			matriz[0][i] = new Bloque(0, i, false);
+			matriz[cantFilas - 1][i] = new Bloque(cantFilas -1, i, false);
 		}
 		for(int i = 1; i < cantFilas - 1; i++) {
-			matriz[i][0] = new BloqueIntransitable(i, 0);
-			matriz[i][cantColumnas - 1] = new BloqueIntransitable(i, cantColumnas - 1);
+			matriz[i][0] = new Bloque(i, 0, false);
+			matriz[i][cantColumnas - 1] = new Bloque(i, cantColumnas - 1, false);
 		}
 		for(int i = 1; i < cantFilas - 1; i++)
 			for(int j = 1; j < cantColumnas - 1; j++)
-				matriz[i][j] = new BloqueTransitable(i, j);
+				matriz[i][j] = new Bloque(i, j, true);
 	}
 	
 	/**
@@ -71,59 +71,47 @@ public class Tablero implements VisitorBloque{
 		for(Coordenada cord : coor) {
 			ubicacionX = cord.getX();
 			ubicacionY = cord.getY();
-			matriz[ubicacionX][ubicacionY] = new BloqueIntransitable(ubicacionX,ubicacionY);
+			matriz[ubicacionX][ubicacionY] = new Bloque(ubicacionX,ubicacionY, false);
 		}
-	}
-	
-	public boolean visitarBloque(BloqueTransitable b) {
-		if(generarAlimento) {
-			int randomAlim = ThreadLocalRandom.current().nextInt(1, 6);
-			if(randomAlim == 1)
-				b.establecerEntidad(new Banana());
-			else if (randomAlim == 2)
-					  b.establecerEntidad(new Manzana());
-				 else if(randomAlim == 3)
-					 	  b.establecerEntidad(new Naranja());
-				 	  else if(randomAlim == 4)
-				 		  	   b.establecerEntidad(new Pera());
-				 	  	   else b.establecerEntidad(new Sandia()); 
-			generarAlimento = false;
-		}
-		if(generarPowerUp) {
-			int randomPowerUp = ThreadLocalRandom.current().nextInt(1, 4);
-			if(randomPowerUp == 1)
-				b.establecerEntidad(new PowerUp1());
-			else if(randomPowerUp == 2)
-					 b.establecerEntidad(new PowerUp2());
-				 else b.establecerEntidad(new PowerUp3());
-			generarPowerUp = false;
-		}
-		return true;
-	}
-	
-	public boolean visitarBloque(BloqueIntransitable b) {
-		return false;
 	}
 	
 	public void generarAlimento() {
 		int randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
 		int randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
-		generarAlimento = true;
-		while(!matriz[randomX][randomY].accept(this)) {
+		while(!matriz[randomX][randomY].getTransitable()) {
 			randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
 			randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
 		}
-		
+		int randomA = ThreadLocalRandom.current().nextInt(1, 6);
+		Entidad e;
+		if(randomA == 1)
+			e = new Banana();
+		else if(randomA == 2)
+				 e = new Manzana();
+			 else if(randomA == 3)
+				 	  e = new Naranja();
+			 	  else if(randomA == 4)
+			 		  	   e = new Pera();
+			 	  	   else e = new Sandia(); 
+		matriz[randomX][randomY].setEntidad(e);
 	}
 	
 	public void generarPowerUp() {
 		int randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
 		int randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
-		generarPowerUp = true;
-		while(!matriz[randomX][randomY].accept(this)) {
+		while(!matriz[randomX][randomY].getTransitable()) {
 			randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
 			randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
 		}
+		int randomA = ThreadLocalRandom.current().nextInt(1, 3);
+		Entidad e;
+		if(randomA == 1)
+			e = new PowerUp1();
+		else if(randomA == 2)
+				 e = new PowerUp2();
+			 else e = new PowerUp3();
+		matriz[randomX][randomY].setEntidad(e);
+		matriz[randomX][randomY].getBloqueGrafico().cambiarImagen(e.getImg());
 	}
 	
 	/**
@@ -131,9 +119,9 @@ public class Tablero implements VisitorBloque{
 	 * @param cord - coordenada del bloque a actualizar.
 	 */
 	public void actualizarBloque(Coordenada cord) {
-		if(matriz[cord.getX()][cord.getY()].accept(this))
-			matriz[cord.getX()][cord.getY()] = new BloqueIntransitable(cord.getX(),cord.getY());
-		miJuego.actualizarVentana(cord, matriz[cord.getX()][cord.getY()].getBloqueGrafico().getImagen());
+		if(matriz[cord.getX()][cord.getY()].getTransitable())
+			matriz[cord.getX()][cord.getY()] = new Bloque(cord.getX(),cord.getY(), false);
+		miJuego.actualizarVentana(cord);
 	}
 	
 	/**
@@ -168,40 +156,42 @@ public class Tablero implements VisitorBloque{
 		return powerUp;
 	}
 	
-	public boolean visitarBloqueMover(BloqueIntransitable b) {
-		miJuego.gameOver();
-		return false;
-	}
-	
-	public boolean visitarBloqueMover(BloqueTransitable b) {
-		return true;
-	}
-	
-	
-	
 	public boolean mePuedoMover(Bloque b, char direccion) {
 		boolean toReturn = true;
 		if(direccion == 'd') {
 			Coordenada coord = b.getCoord();
 			coord.setY(coord.getY() - 1);
-			toReturn = (matriz[coord.getX()][coord.getY()].acceptMover(this));
+			toReturn = (matriz[coord.getX()][coord.getY()].getTransitable());
 		} else if(direccion == 'u') {
 			Coordenada coord = b.getCoord();
 			coord.setY(coord.getY() + 1);
-			toReturn = (matriz[coord.getX()][coord.getY()].acceptMover(this));
+			toReturn = (matriz[coord.getX()][coord.getY()].getTransitable());
 		} else if(direccion == 'l') {
 			Coordenada coord = b.getCoord();
 			coord.setX(coord.getX() - 1);
-			toReturn = (matriz[coord.getX()][coord.getY()].acceptMover(this));
+			toReturn = (matriz[coord.getX()][coord.getY()].getTransitable());
 		} else if(direccion == 'l') {
 			Coordenada coord = b.getCoord();
 			coord.setX(coord.getX() + 1);
-			toReturn = (matriz[coord.getX()][coord.getY()].acceptMover(this));
+			toReturn = (matriz[coord.getX()][coord.getY()].getTransitable());
 		}
+		if(!toReturn)
+			miJuego.gameOver();
 		return toReturn;
 	}
 	
 	public void crearBloqueTransitable(Coordenada c) {
-		matriz[c.getX()][c.getY()] = new BloqueTransitable(c.getX(), c.getY());
+		matriz[c.getX()][c.getY()] = new Bloque(c.getX(), c.getY(), true);
+	}
+	
+	public void intercambiarBloque(Coordenada c1, Coordenada c2) {
+		Bloque aux = null;
+		aux = matriz[c1.getX()][c1.getY()];
+		matriz[c1.getX()][c1.getY()] = matriz[c2.getX()][c2.getY()];
+		matriz[c1.getX()][c1.getY()].getCoord().setX(c2.getX());
+		matriz[c1.getX()][c1.getY()].getCoord().setY(c2.getY());
+		matriz[c2.getX()][c2.getY()] = aux;
+		matriz[c2.getX()][c2.getY()].getCoord().setX(aux.getCoord().getX());
+		matriz[c2.getX()][c2.getY()].getCoord().setX(aux.getCoord().getY());
 	}
 }

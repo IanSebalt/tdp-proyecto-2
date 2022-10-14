@@ -1,14 +1,17 @@
 package GUI;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import Tablero.*;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import Juego.*;
 import Tablero.Coordenada;
@@ -18,6 +21,12 @@ import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.AbstractAction;
 import java.awt.event.*;
+import java.awt.BorderLayout;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+import javax.swing.JTextArea;
 
 public class Ventana {
 	
@@ -27,8 +36,10 @@ public class Ventana {
 	protected JPanel panelJuego;
 	protected JPanel panelMenu;
 	protected JPanel panelMain;
-	protected Coordenada posAct;
 	protected JLabel[][] labels;
+	protected String jugadorActual;
+	protected JPanel panelRanking;
+	protected JTextArea textoRanking;
 	protected static final int largo = 32;
 	protected static final int ancho = 32;
 	protected static final int pixelAncho = 26;
@@ -55,9 +66,12 @@ public class Ventana {
 	}
 	
 	private void initialize() {
+		miJuego = new Juego(this);
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setFocusable(true);
+		ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/Snaketree.png"));
+		frame.setIconImage(icon.getImage());
 		frame.addKeyListener(new TeclaListener(this));
 		JFrame temp = new JFrame();
 		temp.pack();
@@ -74,48 +88,59 @@ public class Ventana {
 		
 		panelMenu = new JPanel();
 		panelMain.add(panelMenu);
-		panelMenu.setLayout(null);
 		panelMenu.setBounds(0, 0, ancho * pixelAncho, largo * pixelLargo);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnJugar = new JButton("Jugar");
+		btnJugar.setBounds(374, 215, 89, 23);
+		btnJugar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				jugadorActual = pedirNombre();
 				funcionJugar();
 			}
 		});
-		btnNewButton.setBounds(365, 221, 89, 23);
-		panelMenu.add(btnNewButton);
+		btnJugar.setBackground(new Color(0, 250, 0));
+		panelMenu.setLayout(null);
 		
+		panelRanking = new JPanel();
+		panelRanking.setBackground(new Color(0, 128, 0));
+		panelRanking.setBounds(585, 11, 196, 85);
+		panelMenu.add(panelRanking);
+		panelRanking.setLayout(null);
+		
+		textoRanking = new JTextArea();
+		textoRanking.setBackground(new Color(34, 139, 34));
+		textoRanking.setEditable(false);
+		textoRanking.setBounds(0, 0, 196, 85);
+		panelRanking.add(textoRanking);
+		panelMenu.add(btnJugar);
+		
+		JLabel lblBackground = new JLabel("New label");
+		lblBackground.setBounds(0, 0, 832, 608);
+		ImageIcon background = new ImageIcon(getClass().getResource("/imagenes/battleback1.png"));
+		lblBackground.setIcon(background);
+		panelMenu.add(lblBackground);
+		mostrarRanking();
 		panelJuego = new JPanel();
 		panelJuego.setBounds(0, 0, ancho * pixelAncho, largo * pixelLargo);
 		panelMain.add(panelJuego);
 		panelJuego.setLayout(new GridLayout(ancho, largo, 0, 0));
-		
-		btnVolver = new JButton("Volver");
-		btnVolver.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				funcionVolver();
-			}
-		});
 	}
 	
 	public void iniciarNivel() {
-		//miJuego = new Juego(this);
-		//miJuego.iniciarJuego(largo, ancho);
-		//Bloque[][] tablero = miJuego.getTablero();
-		Coordenada posIni = new Coordenada(15, 15);
+		
+		miJuego.iniciarJuego(largo, ancho);
+		Bloque[][] tablero = miJuego.getTablero();
 		labels = new JLabel[largo][ancho];
 		for(int i = 0; i < largo; i++)
 			for(int j = 0; j < ancho; j++) {
 				JLabel label = new JLabel();
 				labels[i][j] = label;
-				ImageIcon img = new ImageIcon(getClass().getResource(miJuego.getTablero()[i][j].getBloqueGrafico().getImagen()));
+				ImageIcon img = new ImageIcon(getClass().getResource(tablero[i][j].getBloqueGrafico().getImagen()));
 				label.setSize(pixelAncho, pixelLargo);
 				reDimensionar(label, img);
 				label.setIcon(img);
 				panelJuego.add(label);
 			}
-		posAct = posIni;
 	}
 	
 	private void funcionJugar() {
@@ -126,28 +151,34 @@ public class Ventana {
 		panelMain.revalidate();
 	}
 	
-	private void funcionVolver() {
-		panelMenu.removeAll();
-		panelMenu.add(panelJuego);
-		panelMenu.repaint();
-		panelMenu.revalidate();
-	}
-	
 	public String pedirNombre() {
-		//TODO: Implementar.
+		String nombre = JOptionPane.showInputDialog(frame, "Ingresa tu nombre (máx. 30): ", null);
+		if(nombre.length() == 0 || nombre.length() > 30)
+			nombre = JOptionPane.showInputDialog(frame, "Ingresa un nombre válido (máx. 30): ", null);
 		return "";
 	}
 	
 	public void mostrarRanking() {
-		//TODO: Implementar.
+		Jugador[] jugadores = miJuego.darRanking();
+		int count = 0;
+		for(Jugador j : jugadores) {
+			count++;
+			textoRanking.append("TOP "+count+": "+j.getNombre()+"\n");
+		}
 	}
 	
 	public void abrirMenu() {
-		//TODO: Implementar.
+		panelMain.removeAll();
+		panelMain.add(panelMenu);
+		panelMain.repaint();
+		panelMain.revalidate();
 	}
 	
-	public void actualizarGrafica(Coordenada cord, String img) {
-		//TODO: Implementar.
+	public void actualizarGrafica(Coordenada cord) {
+		if(cord != null && cord.getX() > 0 && cord.getX() <= largo && cord.getY() > 0 && cord.getY() <= ancho) {
+			labels[cord.getY()][cord.getX()].setIcon(new ImageIcon(getClass().getResource(miJuego.getTablero()[cord.getY()][cord.getX()].getBloqueGrafico().getImagen())));
+			labels[cord.getY()][cord.getX()].repaint();
+		}
 	}
 	
 	private void reDimensionar(JLabel label, ImageIcon grafico) {
@@ -160,18 +191,23 @@ public class Ventana {
 	}
 	
 	public void moverArriba() {
-		//TODO: Implementar.
+		miJuego.girar('u');
 	}
 	
 	public void moverAbajo() {
-		//TODO: Implementar.
+		miJuego.girar('d');
 	}
 	
 	public void moverDerecha() {
-		//TODO: Implementar.
+		miJuego.girar('r');
 	}
 	
 	public void moverIzquierda() {
-		//TODO: Implementar.
+		miJuego.girar('l');
+	}
+	
+	public void terminarPartida() {
+		abrirMenu();
+		JOptionPane.showMessageDialog(null, "¡Termino la partida! Obtuviste "+miJuego.getPuntaje()+" puntos.", "Partida finalizada.", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

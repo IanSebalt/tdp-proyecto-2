@@ -32,7 +32,7 @@ public class Serpiente implements VisitorEntidad{
 		for (Coordenada coordenadas : coor) {
 			int corX = coordenadas.getX();
 			int corY = coordenadas.getY();
-			cuerpo.addLast(new BloqueIntransitable(corX,corY));
+			cuerpo.addLast(new Bloque(corX,corY, false));
 		}
 		
 	}
@@ -44,32 +44,24 @@ public class Serpiente implements VisitorEntidad{
 				Bloque cabezaAnt = cabeza();
 				Bloque nuevaCab = cuerpo.removeLast();
 				cuerpo.addFirst(nuevaCab);
-				miTablero.crearBloqueTransitable(nuevaCab.getCoord());
+				Coordenada aux = nuevaCab.getCoord();
 				if(d == 'd') {
 					nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY() - 1);
 					nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX());
-					BloqueGrafico bg = nuevaCab.getBloqueGrafico();
-					nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
-					cabezaAnt.setBloqueGrafico(bg);
 				} else if(d == 'u') {
 					nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY() + 1);
 					nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX());
-					BloqueGrafico bg = nuevaCab.getBloqueGrafico();
-					nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
-					cabezaAnt.setBloqueGrafico(bg);
 				} else if(d == 'l') {
 					nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY());
 					nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX() - 1);
-					BloqueGrafico bg = nuevaCab.getBloqueGrafico();
-					nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
-					cabezaAnt.setBloqueGrafico(bg);
 				} else {
 					nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY());
 					nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX() + 1);
-					BloqueGrafico bg = nuevaCab.getBloqueGrafico();
-					nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
-					cabezaAnt.setBloqueGrafico(bg);
-				}				
+				}
+				miTablero.intercambiarBloque(aux, nuevaCab.getCoord());
+				BloqueGrafico bg = nuevaCab.getBloqueGrafico();
+				nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
+				cabezaAnt.setBloqueGrafico(bg);
 			}
 		}		
 	}
@@ -98,6 +90,7 @@ public class Serpiente implements VisitorEntidad{
 		String[] arr = p.modificarEstetica();
 		cabezaGraf.cambiarImagen(arr[0]);
 		Iterator<Bloque> it = cuerpo.iterator();
+		it.next();
 		while(it.hasNext()) {
 			Bloque aux = it.next();
 			aux.getBloqueGrafico().cambiarImagen(arr[1]);
@@ -117,6 +110,14 @@ public class Serpiente implements VisitorEntidad{
 			aux.getBloqueGrafico().cambiarImagen(arr[1]);
 		}
 		//Falta aumentar tamaño		
+	}
+	
+	public void setDireccion(char c) {
+		direccion = c;
+	}
+	
+	public char getDireccion() {
+		return direccion;
 	}
 
 	@Override
