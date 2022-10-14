@@ -46,14 +46,26 @@ public class Tablero implements VisitorBloque{
 				matriz[i][j] = new BloqueTransitable(i, j);
 	}
 	
+	/**
+	 * Método para establecer las comidas que se generarán en el tablero.
+	 * @param com - comidas a generar.
+	 */
 	public void establecerComida(int com) {
 		comida = com;		
 	}
 	
+	/**
+	 * Método para establecer los powerups que se generarán en el tablero.
+	 * @param pow - powerups a generar.
+	 */
 	public void establecerPowerUp(int pow) {
 		powerUp = pow;
 	}
 	
+	/**
+	 * Método que genera las paredes con las coordenadas recibidas por parámetro.
+	 * @param coor - coordenas de las paredes a generar.
+	 */
 	public void generarParedes(Coordenada coor []) {
 		int ubicacionX, ubicacionY;
 		for(Coordenada cord : coor) {
@@ -114,24 +126,44 @@ public class Tablero implements VisitorBloque{
 		}
 	}
 	
+	/**
+	 * Método que actualiza un bloque transitable a uno intransitable.
+	 * @param cord - coordenada del bloque a actualizar.
+	 */
 	public void actualizarBloque(Coordenada cord) {
 		if(matriz[cord.getX()][cord.getY()].accept(this))
 			matriz[cord.getX()][cord.getY()] = new BloqueIntransitable(cord.getX(),cord.getY());
 		miJuego.actualizarVentana(cord, matriz[cord.getX()][cord.getY()].getBloqueGrafico().getImagen());
 	}
 	
+	/**
+	 * Método que actualiza el puntaje en el juego
+	 * @param punt - puntaje a sumar.
+	 */
 	public void IncrementarPuntaje(int punt) {
 		miJuego.IncrementarPuntaje(punt);
 	}
 	
+	/**
+	 * Método que retorna la matriz del tablero
+	 * @return matriz de bloques del tablero.
+	 */
 	public Bloque[][] getMatriz(){
 		return matriz;
 	}
 	
+	/**
+	 * Método que retorna la cantidad de alimentos restante en el tablero.
+	 * @return cantidad de alimentos restante.
+	 */
 	public int getAlimento() {
 		return comida;
 	}
 	
+	/**
+	 * Método que retorna la cantidad de powerups restante en el tablero
+	 * @return cantidad de powerups restante.
+	 */
 	public int getPowerUp() {
 		return powerUp;
 	}

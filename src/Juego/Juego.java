@@ -18,6 +18,7 @@ import Tablero.*;
 public class Juego {
 	
 	protected int puntajeActual;
+	protected int nivelActual;
 	protected Reloj miReloj;
 	protected Jugador miJugador;
 	protected Ventana miVentana;
@@ -30,11 +31,18 @@ public class Juego {
 		puntajeActual = 0;
 		miJugador = null;
 		miSerpiente = null;
+		nivelActual = 1;
 	}
 	
+	/**
+	 * Método que inicia el juego creando el tablero con un ancho y largo recibido por parámetro
+	 * y genera el primer nivel.
+	 * @param largo - largo del tablero.
+	 * @param ancho - ancho del tablero.
+	 */
 	public void iniciarJuego(int largo, int ancho) {
 		miTablero = new Tablero(this, largo, ancho);
-		generarNivel(1);
+		generarNivel(nivelActual);
 	}
 	
 	public void gameOver() {
@@ -88,7 +96,13 @@ public class Juego {
 		
 	}
 	
+	/**
+	 * Método que genera el nivel leyendo un archivo de texto y pasandole los valores al tablero para la
+	 * generación de las paredes, alimentos y powerUps.
+	 * @param nivel - nivel de dificultad del juego.
+	 */
 	public void generarNivel(int nivel) {
+		this.nivelActual = nivel;
 		Coordenada paredes [] = new Coordenada[50];
 		int powerUps = 0;
 		int Alimentos = 0;
@@ -96,7 +110,7 @@ public class Juego {
 		File level = new File("Nivel"+ nivel + ".txt");
 		try {
 			if(!level.createNewFile()&&level.length()==0)
-				crearTextoNivel(level.getPath(), nivel);
+				crearTextoNivel(level.getPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -113,10 +127,8 @@ public class Juego {
 		}
 		try {
 			while((linea=lector.readLine())!=null) {
-				System.out.println(linea);
 				scan = new Scanner(linea.split(arreglo_Ignore[cursor])[1]);
 				cursor++;
-				System.out.println(scan.hasNextInt());
 				while(scan.hasNextInt())
 					if(contador==1) 
 						powerUps = scan.nextInt();				
@@ -135,12 +147,10 @@ public class Juego {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Coordenada pa [] = new Coordenada [cantElementos];
+		Coordenada achicarArreglo [] = new Coordenada [cantElementos];
 		for(int i=0; i<cantElementos;i++)
-			pa[i] = paredes[i];
-		paredes = pa;
-		for(Coordenada c : paredes)
-			System.out.println("asd" + c.getX() + " " + c.getY());		
+			achicarArreglo[i] = paredes[i];
+		paredes = achicarArreglo;			
 		miTablero.establecerComida(Alimentos);
 		miTablero.establecerPowerUp(powerUps);
 		miTablero.generarParedes(paredes);
@@ -174,18 +184,39 @@ public class Juego {
 		return top5;
 	}
 	
-	public void cambiarNivel() {
-		//TODO: Implementar.
+	/**
+	 * Método que cambia el nivel una vez terminado el actual, en caso de que se jugaron todos
+	 * los niveles termina el juego.
+	 * @param nivelActual - nivel actual de juego.
+	 */
+	public void cambiarNivel(int nivelActual) {
+		if(nivelActual==5)
+			gameOver();
+		else
+			generarNivel(nivelActual+1);
 	}
 	
+	/**
+	 * Método que actualiza el gráfico de la ventana.
+	 * @param cord - coordenadas del bloque a actualizar.
+	 * @param img - nueva imagen para actualizar el bloque.
+	 */
 	public void actualizarVentana(Coordenada cord, String img) {
 		miVentana.actualizarGrafica(cord, img);
 	}
 	
+	/**
+	 * Método que actualiza el puntaje actual
+	 * @param punt - puntos a sumarle al puntaje actual.
+	 */
 	public void IncrementarPuntaje(int punt) {
 		puntajeActual += punt;
 	}
 	
+	/**
+	 * Método que retorna la matriz de bloques de tablero.
+	 * @return una matriz de bloques.
+	 */
 	public Bloque[][] getTablero(){
 		return miTablero.getMatriz();
 	}
@@ -194,19 +225,31 @@ public class Juego {
 	public boolean checkConsumibles() {
 		return miTablero.getAlimento()>0 || miTablero.getPowerUp()>0;
 	}
-		
-	//Método que escribe los niveles en un archivo de texo.		
-	private static void crearTextoNivel(String path, int lvl) {
+	
+	/**
+	 * Método que retorna el nivel actual del juego
+	 * @return nivel actual del juego.
+	 */
+	public int getNivel() {
+		return nivelActual;
+	}
+	
+	/**
+	 * Método que crea el archivo de texto del nivel ingresado para ser modificado.	
+	 * @param path - nombre del archivo a escribir.
+	 * @param lvl - nivel de juego.
+	 */
+	private void crearTextoNivel(String path) {
 		System.out.println("LLego");
 		File nivel = new File(path);
 		try {
 			FileWriter writer = new FileWriter(nivel);
 			BufferedWriter escritor = new BufferedWriter(writer);
 			PrintWriter pw = new PrintWriter(escritor);
-			pw.write("Nivel "+lvl+":");
+			pw.write("Nivel "+nivelActual+":");
 			pw.write("\nPowerUps= 0");
 			pw.write("\nComidas= 0");
-			pw.write("\nParedes= 10 11 12 13 14 12 1 2 1");
+			pw.write("\nParedes= 0");
 			pw.close();
 			escritor.close();
 		} catch (IOException e) {

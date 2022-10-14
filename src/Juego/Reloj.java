@@ -11,6 +11,9 @@ public class Reloj implements Runnable{
 		segundos = 0;
 	}
 	
+	/**
+	 * Método run que mantiene un nuevo hilo para que la serpiente este en constante movimiento,
+	 */
 	public void run() {
 		while(true){
 			try {
@@ -24,10 +27,13 @@ public class Reloj implements Runnable{
 		}
 	}
 	
+	/**
+	 * Método que mueve a la serpiente en la direccíon a la que se dirige.
+	 */
 	public void actualizarTablero() {
 		miJuego.mover();
 		if(miJuego.checkConsumibles()==false)
-			miJuego.cambiarNivel();
+			miJuego.cambiarNivel(miJuego.getNivel());
 	}
 	
 	public void actualizarTiempo() {
