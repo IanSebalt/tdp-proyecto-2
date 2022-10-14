@@ -9,27 +9,11 @@ public class PowerUp1 extends PowerUp{
 		puntaje = 50;
 		arrEstetica = new String[2];
 		arrEstetica[0] = "Directorio1";
-		arrEstetica[1] = "Directorio2";
-		
-		
-	}
-	public String[] modificarEstetica() {
-		return arrEstetica; 
+		arrEstetica[1] = "Directorio2";			
 	}
 	
 	public void accept(VisitorEntidad v) {
 		v.chocar(this);		
 	}
 	
-	public int getPuntaje() {
-		return puntaje;
-	}
-	
-	public int getTamañoAIncrementar() {
-		return incrementarTamaño;
-	}
-	
-	public String getImg() {
-		return img;
-	}
 }

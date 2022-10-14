@@ -16,20 +16,4 @@ public class PowerUp2 extends PowerUp{
 	public void accept(VisitorEntidad v) {
 		v.chocar(this);
 	}
-	
-	public String[] modificarEstetica() {
-		return arrEstetica;
-	}
-	
-	public int getPuntaje() {
-		return puntaje;
-	}
-	
-	public int getTamañoAIncrementar() {
-		return incrementarTamaño;
-	}
-
-	public String getImg() {
-		return img;
-	}
 }

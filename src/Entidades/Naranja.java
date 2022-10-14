@@ -13,15 +13,4 @@ public class Naranja extends Comida{
 		v.chocar(this);
 	}
 	
-	public int getIncrementarTamaño() {
-		return this.incrementarTamaño;
-	}
-
-	public int getPuntaje() {
-		return this.puntaje;
-	}
-	
-	public String getImg() {
-		return this.img;
-	}
 }

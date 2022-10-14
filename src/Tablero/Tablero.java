@@ -184,6 +184,14 @@ public class Tablero{
 		matriz[c.getX()][c.getY()] = new Bloque(c.getX(), c.getY(), true);
 	}
 	
+	public Bloque getBloque(Coordenada c) {
+		return matriz[c.getX()][c.getY()];
+	}
+	
+	public void setBloque(Coordenada c, Bloque b) {
+		matriz[c.getX()][c.getY()] = b;
+	}
+	
 	public void intercambiarBloque(Coordenada c1, Coordenada c2) {
 		Bloque aux = null;
 		aux = matriz[c1.getX()][c1.getY()];
