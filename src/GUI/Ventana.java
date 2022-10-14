@@ -40,13 +40,11 @@ public class Ventana {
 	protected String jugadorActual;
 	protected JPanel panelRanking;
 	protected JTextArea textoRanking;
+	protected Thread t1;
 	protected static final int largo = 32;
 	protected static final int ancho = 32;
 	protected static final int pixelAncho = 26;
 	protected static final int pixelLargo = 19;
-	
-	//PRUEBA
-	protected Reloj re;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -146,13 +144,13 @@ public class Ventana {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		miJuego.start();
+		t1 = new Thread(miJuego.getReloj());
+		t1.start();
 		miJuego.generarConsumible();
 	}
 	
 	private void funcionJugar() {
 		panelMain.removeAll();
-		miJuego = new Juego(this);
 		iniciarNivel();
 		panelMain.add(panelJuego);
 		panelMain.repaint();
@@ -188,6 +186,7 @@ public class Ventana {
 			reDimensionar(labels[cord.getX()][cord.getY()], img);
 			labels[cord.getX()][cord.getY()].setIcon(img);
 			labels[cord.getX()][cord.getY()].repaint();
+			panelJuego.repaint();
 			System.out.println("actualiza coordenada"+cord.getX()+" "+cord.getY());
 		}
 	}
@@ -219,8 +218,19 @@ public class Ventana {
 	
 	public void terminarPartida() {
 		panelJuego.removeAll();
-		miJuego.finish();
+		miJuego.getReloj().finish();
 		abrirMenu();
 		JOptionPane.showMessageDialog(null, "¡Termino la partida! Obtuviste "+miJuego.getPuntaje()+" puntos.", "Partida finalizada.", JOptionPane.INFORMATION_MESSAGE);
+		mostrarRanking();
+	}
+
+	public void refrescar() {
+		for(int i = 0; i < labels.length; i++)
+			for(int j = 0; j < labels[0].length; j++) 
+				actualizarGrafica(new Coordenada(i, j));
+	}
+	
+	public void cambioDeNivel() {
+		JOptionPane.showMessageDialog(null, "¡Terminaste el nivel! El siguiente nivel es el: "+miJuego.getNivel(), "Nivel finalizado.", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

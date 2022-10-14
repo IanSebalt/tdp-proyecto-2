@@ -98,7 +98,7 @@ public class Tablero{
 			randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
 			randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
 		}
-		int randomA = ThreadLocalRandom.current().nextInt(1, 3);
+		int randomA = ThreadLocalRandom.current().nextInt(1, 4);
 		Entidad e;
 		if(randomA == 1)
 			e = new PowerUp1();
@@ -107,6 +107,7 @@ public class Tablero{
 			 else e = new PowerUp3();
 		matriz[randomX][randomY].setEntidad(e);
 		matriz[randomX][randomY].getBloqueGrafico().cambiarImagen(e.getImg());
+		miJuego.actualizarVentana(new Coordenada(randomX, randomY));
 	}
 	
 	/**
@@ -202,5 +203,13 @@ public class Tablero{
 	
 	public Entidad hayEntidad(Coordenada cord) {
 		return matriz[cord.getX()][cord.getY()].getEntidad();
+	}
+
+	public void decrementarPowerUp() {
+		powerUp -= 1;
+	}
+
+	public void decrementarComida() {
+		comida -= 1;
 	}
 }

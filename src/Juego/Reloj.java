@@ -33,8 +33,10 @@ public class Reloj implements Runnable{
 	 */
 	public void actualizarTablero() {
 		miJuego.mover();
-		if(miJuego.checkConsumibles()==false)
+		if(miJuego.checkConsumibles()==false) {
 			miJuego.cambiarNivel(miJuego.getNivel());
+			miJuego.generarConsumible();
+		}
 	}
 	
 	public void actualizarTiempo() {

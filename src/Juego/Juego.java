@@ -62,7 +62,7 @@ public class Juego {
 	}
 	
 	public void generarConsumible(){
-		miTablero.generarAlimento();
+		miTablero.generarPowerUp();
 	}
 	
 	
@@ -110,6 +110,7 @@ public class Juego {
 	 * @param nivel - nivel de dificultad del juego.
 	 */
 	public void generarNivel(int nivel) {
+		miTablero = new Tablero(this, miTablero.getMatriz().length, miTablero.getMatriz()[0].length);
 		this.nivelActual = nivel;
 		Coordenada paredes [] = new Coordenada[50];
 		int powerUps = 0;
@@ -162,16 +163,19 @@ public class Juego {
 		miTablero.establecerComida(Alimentos);
 		miTablero.establecerPowerUp(powerUps);
 		miTablero.generarParedes(paredes);
-		int randomX = ThreadLocalRandom.current().nextInt(1, miTablero.getMatriz().length);
-		int randomY = ThreadLocalRandom.current().nextInt(1, miTablero.getMatriz()[0].length);
+		int randomX = ThreadLocalRandom.current().nextInt(10, miTablero.getMatriz().length-5);
+		int randomY = ThreadLocalRandom.current().nextInt(10, miTablero.getMatriz()[0].length-5);
 		while(!(miTablero.getMatriz()[randomX][randomY].getTransitable() && miTablero.getMatriz()[randomX][randomY - 1].getTransitable() && miTablero.getMatriz()[randomX][randomY - 2].getTransitable())) {
-			randomX = ThreadLocalRandom.current().nextInt(1, miTablero.getMatriz().length);
-			randomY = ThreadLocalRandom.current().nextInt(1, miTablero.getMatriz()[0].length);
+			randomX = ThreadLocalRandom.current().nextInt(10, miTablero.getMatriz().length-5);
+			randomY = ThreadLocalRandom.current().nextInt(10, miTablero.getMatriz()[0].length-5);
 		}
 		Coordenada [] ini = new Coordenada[3];
 		for(int i = 0; i < 3; i++) 
 			ini[i] = new Coordenada(randomX, randomY - i);
 		miSerpiente = new Serpiente(miTablero, ini);
+		if(nivelActual != 1)
+			miVentana.refrescar();
+			
 	}
 	
 	
@@ -210,8 +214,11 @@ public class Juego {
 	public void cambiarNivel(int nivelActual) {
 		if(nivelActual==5)
 			gameOver();
-		else
-			generarNivel(nivelActual+1);
+		else{
+			nivelActual++;
+			generarNivel(nivelActual);
+			miVentana.cambioDeNivel();
+		}
 	}
 	
 	/**
@@ -279,12 +286,7 @@ public class Juego {
 		return puntajeActual;
 	}
 	
-	public void start() {
-		t1 = new Thread(miReloj);
-		t1.start();
-	}
-	
-	public void finish() {
-		miReloj.finish();
+	public Reloj getReloj() {
+		return miReloj;
 	}
 }

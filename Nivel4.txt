@@ -1,0 +1,4 @@
+Nivel 4:
+PowerUps= 2
+Comidas= 0
+Paredes= 0

@@ -160,6 +160,7 @@ public class Serpiente implements VisitorEntidad{
 		BloqueGrafico cabezaGraf = cabeza().getBloqueGrafico();
 		String[] arr = p.modificarEstetica();
 		cabezaGraf.cambiarImagen(arr[0]);
+		miTablero.decrementarPowerUp();
 		Iterator<Bloque> it = cuerpo.iterator();
 		it.next();
 		while(it.hasNext()) {
@@ -179,6 +180,7 @@ public class Serpiente implements VisitorEntidad{
 	@Override
 	public void chocar(Comida c) {
 		miTablero.IncrementarPuntaje(c.getPuntaje());
+		miTablero.decrementarComida();
 		aCrecer = c.getIncrementarTamaño();	
 	}
 	
@@ -186,7 +188,7 @@ public class Serpiente implements VisitorEntidad{
 		if(e != null) {
 			e.accept(this);
 			miTablero.setBloque(b.getCoord(), new Bloque(b.getCoord().getX(), b.getCoord().getY(), true));
-			miTablero.generarAlimento();
+			miTablero.generarPowerUp();
 		}
 	}
 }
