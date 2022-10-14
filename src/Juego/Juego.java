@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 import GUI.Ventana;
 import ManejoArchivos.manejoArchivo;
@@ -45,17 +46,22 @@ public class Juego {
 		generarNivel(nivelActual);
 	}
 	
-	public void gameOver() {
+	public synchronized void gameOver() {
 		miVentana.terminarPartida();
 	}
 	
-	public void girar(char dir) {
-		miSerpiente.setDireccion(dir);
-		miSerpiente.mover(dir);
+	public synchronized void girar(char dir) {
+		char dirac = miSerpiente.getDireccion();
+		if((dirac == 'u' && dir != 'd') || (dirac == 'l' && dir != 'r') || (dirac == 'd' && dir != 'u') || (dirac == 'r' && dir != 'l'))
+			miSerpiente.setDireccion(dir);
 	}
 	
 	public void mover() {
 		miSerpiente.mover(miSerpiente.getDireccion());
+	}
+	
+	public void generarConsumible(){
+		miTablero.generarAlimento();
 	}
 	
 	
@@ -155,6 +161,16 @@ public class Juego {
 		miTablero.establecerComida(Alimentos);
 		miTablero.establecerPowerUp(powerUps);
 		miTablero.generarParedes(paredes);
+		int randomX = ThreadLocalRandom.current().nextInt(1, miTablero.getMatriz().length);
+		int randomY = ThreadLocalRandom.current().nextInt(1, miTablero.getMatriz()[0].length);
+		while(!(miTablero.getMatriz()[randomX][randomY].getTransitable() && miTablero.getMatriz()[randomX][randomY - 1].getTransitable() && miTablero.getMatriz()[randomX][randomY - 2].getTransitable())) {
+			randomX = ThreadLocalRandom.current().nextInt(1, miTablero.getMatriz().length);
+			randomY = ThreadLocalRandom.current().nextInt(1, miTablero.getMatriz()[0].length);
+		}
+		Coordenada [] ini = new Coordenada[3];
+		for(int i = 0; i < 3; i++) 
+			ini[i] = new Coordenada(randomX, randomY - i);
+		miSerpiente = new Serpiente(miTablero, ini);
 	}
 	
 	
@@ -260,5 +276,14 @@ public class Juego {
 	
 	public int getPuntaje() {
 		return puntajeActual;
+	}
+	
+	public void start() {
+		Thread t1 = new Thread(miReloj);
+		t1.start();
+	}
+	
+	public void finish() {
+		miReloj.finish();
 	}
 }

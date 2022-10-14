@@ -3,21 +3,22 @@ package Juego;
 public class Reloj implements Runnable{
 	
 	protected int segundos;
-	
+	protected boolean continuar;
 	protected Juego miJuego;
 	
 	public Reloj(Juego mJ) {
 		miJuego = mJ;
 		segundos = 0;
+		continuar = true;
 	}
 	
 	/**
 	 * Método run que mantiene un nuevo hilo para que la serpiente este en constante movimiento,
 	 */
 	public void run() {
-		while(true){
+		while(continuar){
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 				segundos++;
 				actualizarTablero();
 			} catch (InterruptedException e) {
@@ -38,5 +39,9 @@ public class Reloj implements Runnable{
 	
 	public void actualizarTiempo() {
 		//TODO: Implementar.
+	}
+	
+	public void finish() {
+		continuar = false;
 	}
 }

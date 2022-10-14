@@ -21,10 +21,6 @@ public class Tablero{
 	
 	protected int cantColumnas;
 	
-	protected boolean generarAlimento;
-	
-	protected boolean generarPowerUp;
-	
 	public Tablero(Juego mj, int cf, int cC) {
 		this.cantFilas = cf;
 		this.cantColumnas = cC;
@@ -94,6 +90,7 @@ public class Tablero{
 			 		  	   e = new Pera();
 			 	  	   else e = new Sandia(); 
 		matriz[randomX][randomY].setEntidad(e);
+		miJuego.actualizarVentana(new Coordenada(randomX, randomY));
 	}
 	
 	public void generarPowerUp() {
@@ -158,20 +155,17 @@ public class Tablero{
 	
 	public boolean mePuedoMover(Bloque b, char direccion) {
 		boolean toReturn = true;
-		if(direccion == 'd') {
-			Coordenada coord = b.getCoord();
+		Coordenada coord = new Coordenada(b.getCoord().getX(), b.getCoord().getY());
+		if(direccion == 'l') {
 			coord.setY(coord.getY() - 1);
 			toReturn = (matriz[coord.getX()][coord.getY()].getTransitable());
-		} else if(direccion == 'u') {
-			Coordenada coord = b.getCoord();
+		} else if(direccion == 'r') {
 			coord.setY(coord.getY() + 1);
 			toReturn = (matriz[coord.getX()][coord.getY()].getTransitable());
-		} else if(direccion == 'l') {
-			Coordenada coord = b.getCoord();
+		} else if(direccion == 'u') {
 			coord.setX(coord.getX() - 1);
 			toReturn = (matriz[coord.getX()][coord.getY()].getTransitable());
-		} else if(direccion == 'l') {
-			Coordenada coord = b.getCoord();
+		} else if(direccion == 'd') {
 			coord.setX(coord.getX() + 1);
 			toReturn = (matriz[coord.getX()][coord.getY()].getTransitable());
 		}
@@ -190,16 +184,21 @@ public class Tablero{
 	
 	public void setBloque(Coordenada c, Bloque b) {
 		matriz[c.getX()][c.getY()] = b;
+		miJuego.actualizarVentana(c);
 	}
 	
 	public void intercambiarBloque(Coordenada c1, Coordenada c2) {
 		Bloque aux = null;
 		aux = matriz[c1.getX()][c1.getY()];
+		System.out.println(matriz[c1.getX()][c1.getY()].getBloqueGrafico().getImagen());
 		matriz[c1.getX()][c1.getY()] = matriz[c2.getX()][c2.getY()];
-		matriz[c1.getX()][c1.getY()].getCoord().setX(c2.getX());
-		matriz[c1.getX()][c1.getY()].getCoord().setY(c2.getY());
 		matriz[c2.getX()][c2.getY()] = aux;
-		matriz[c2.getX()][c2.getY()].getCoord().setX(aux.getCoord().getX());
-		matriz[c2.getX()][c2.getY()].getCoord().setX(aux.getCoord().getY());
+		System.out.println(matriz[c1.getX()][c1.getY()].getBloqueGrafico().getImagen());
+		miJuego.actualizarVentana(c1);
+		miJuego.actualizarVentana(c2);
+	}
+	
+	public Entidad hayEntidad(Coordenada cord) {
+		return matriz[cord.getX()][cord.getY()].getEntidad();
 	}
 }

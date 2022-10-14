@@ -6,7 +6,7 @@ public class Banana extends Comida{
 	public Banana() {
 		incrementarTamaño = 4;
 		puntaje = 50;
-		img = "/imagenes/banana";
+		img = "/imagenes/banana.png";
 	}
 	
 	public void accept(VisitorEntidad v) {

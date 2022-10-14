@@ -127,7 +127,6 @@ public class Ventana {
 	}
 	
 	public void iniciarNivel() {
-		
 		miJuego.iniciarJuego(largo, ancho);
 		Bloque[][] tablero = miJuego.getTablero();
 		labels = new JLabel[largo][ancho];
@@ -141,10 +140,13 @@ public class Ventana {
 				label.setIcon(img);
 				panelJuego.add(label);
 			}
+		miJuego.start();
+		miJuego.generarConsumible();
 	}
 	
 	private void funcionJugar() {
 		panelMain.removeAll();
+		miJuego = new Juego(this);
 		iniciarNivel();
 		panelMain.add(panelJuego);
 		panelMain.repaint();
@@ -176,8 +178,12 @@ public class Ventana {
 	
 	public void actualizarGrafica(Coordenada cord) {
 		if(cord != null && cord.getX() > 0 && cord.getX() <= largo && cord.getY() > 0 && cord.getY() <= ancho) {
-			labels[cord.getY()][cord.getX()].setIcon(new ImageIcon(getClass().getResource(miJuego.getTablero()[cord.getY()][cord.getX()].getBloqueGrafico().getImagen())));
-			labels[cord.getY()][cord.getX()].repaint();
+			ImageIcon img = new ImageIcon(getClass().getResource(miJuego.getTablero()[cord.getX()][cord.getY()].getBloqueGrafico().getImagen()));
+			reDimensionar(labels[cord.getX()][cord.getY()], img);
+			labels[cord.getX()][cord.getY()].setIcon(img);
+			labels[cord.getX()][cord.getY()].repaint();
+			panelJuego.repaint();
+			System.out.println("actualiza coordenada"+cord.getX()+" "+cord.getY());
 		}
 	}
 	
@@ -207,6 +213,8 @@ public class Ventana {
 	}
 	
 	public void terminarPartida() {
+		panelJuego.removeAll();
+		miJuego.finish();
 		abrirMenu();
 		JOptionPane.showMessageDialog(null, "¡Termino la partida! Obtuviste "+miJuego.getPuntaje()+" puntos.", "Partida finalizada.", JOptionPane.INFORMATION_MESSAGE);
 	}

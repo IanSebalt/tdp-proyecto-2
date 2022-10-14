@@ -16,6 +16,7 @@ public  class Bloque {
 		if(transitable)
 			miBloqueGrafico.cambiarImagen("/imagenes/cuadverde.png");
 		else miBloqueGrafico.cambiarImagen("/imagenes/intr.png");
+		miEntidad = null;
 	}
 	
 	public BloqueGrafico getBloqueGrafico() {
@@ -44,5 +45,9 @@ public  class Bloque {
 			miBloqueGrafico.cambiarImagen(e.getImg());
 		else miBloqueGrafico.cambiarImagen("/imagenes/cuadverde.png");
 		
+	}
+	
+	public Entidad getEntidad() {
+		return miEntidad;
 	}
 }
