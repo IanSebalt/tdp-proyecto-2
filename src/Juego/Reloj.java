@@ -18,7 +18,7 @@ public class Reloj implements Runnable{
 	public void run() {
 		while(continuar){
 			try {
-				Thread.sleep(100);
+				Thread.sleep(200);
 				segundos++;
 				actualizarTablero();
 			} catch (InterruptedException e) {

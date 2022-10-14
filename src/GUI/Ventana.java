@@ -140,6 +140,12 @@ public class Ventana {
 				label.setIcon(img);
 				panelJuego.add(label);
 			}
+		//Damos tiempo para la carga del juego.
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		miJuego.start();
 		miJuego.generarConsumible();
 	}
@@ -182,7 +188,6 @@ public class Ventana {
 			reDimensionar(labels[cord.getX()][cord.getY()], img);
 			labels[cord.getX()][cord.getY()].setIcon(img);
 			labels[cord.getX()][cord.getY()].repaint();
-			panelJuego.repaint();
 			System.out.println("actualiza coordenada"+cord.getX()+" "+cord.getY());
 		}
 	}

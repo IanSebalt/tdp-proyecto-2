@@ -45,7 +45,7 @@ public class Serpiente implements VisitorEntidad{
 		direccion = 'r';
 	}
 	
-	public void mover(char d) {
+	public synchronized void mover(char d) {
 		if((direccion == 'u' && d != 'd') || (direccion == 'l' && d != 'r') || (direccion == 'r' && d != 'l') || direccion == 'd' && d != 'u' ) {
 			if(aCrecer == 0) {
 				moverSinCrecimiento(d);
@@ -74,7 +74,7 @@ public class Serpiente implements VisitorEntidad{
 				System.out.println("se mueve con crecimiento hacia izq");
 			} else if(d == 'u') {
 				Coordenada nuevaCoord = new Coordenada(cabeza().getCoord().getX() - 1, cabeza().getCoord().getY());
-				Bloque nuevaCab = miTablero.getBloque(nuevaCoord);
+				Bloque nuevaCab = new Bloque(nuevaCoord.getX(), nuevaCoord.getY(), false);
 				BloqueGrafico aux = cuerpo.getLast().getBloqueGrafico();
 				e = miTablero.hayEntidad(nuevaCoord);
 				nuevaCab.setBloqueGrafico(cabeza().getBloqueGrafico());
@@ -85,7 +85,7 @@ public class Serpiente implements VisitorEntidad{
 				System.out.println("se mueve con crecimiento hacia arriba");
 			} else if(d == 'd') {
 				Coordenada nuevaCoord = new Coordenada(cabeza().getCoord().getX() + 1, cabeza().getCoord().getY());
-				Bloque nuevaCab = miTablero.getBloque(nuevaCoord);
+				Bloque nuevaCab = new Bloque(nuevaCoord.getX(), nuevaCoord.getY(), false);
 				BloqueGrafico aux = cuerpo.getLast().getBloqueGrafico();
 				e = miTablero.hayEntidad(nuevaCoord);
 				nuevaCab.setBloqueGrafico(cabeza().getBloqueGrafico());
@@ -96,7 +96,7 @@ public class Serpiente implements VisitorEntidad{
 				System.out.println("se mueve con crecimiento hacia abajo");
 			} else if(d == 'r') {
 				Coordenada nuevaCoord = new Coordenada(cabeza().getCoord().getX(), cabeza().getCoord().getY() + 1);
-				Bloque nuevaCab = miTablero.getBloque(nuevaCoord);
+				Bloque nuevaCab = new Bloque(nuevaCoord.getX(), nuevaCoord.getY(), false);
 				BloqueGrafico aux = cuerpo.getLast().getBloqueGrafico();
 				e = miTablero.hayEntidad(nuevaCoord);
 				nuevaCab.setBloqueGrafico(cabeza().getBloqueGrafico());

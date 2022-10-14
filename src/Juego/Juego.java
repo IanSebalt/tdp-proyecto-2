@@ -25,6 +25,7 @@ public class Juego {
 	protected Ventana miVentana;
 	protected Tablero miTablero;
 	protected Serpiente miSerpiente;
+	protected Thread t1;
 	
 	public Juego(Ventana v) {
 		miReloj = new Reloj(this);
@@ -46,11 +47,11 @@ public class Juego {
 		generarNivel(nivelActual);
 	}
 	
-	public synchronized void gameOver() {
+	public void gameOver() {
 		miVentana.terminarPartida();
 	}
 	
-	public synchronized void girar(char dir) {
+	public void girar(char dir) {
 		char dirac = miSerpiente.getDireccion();
 		if((dirac == 'u' && dir != 'd') || (dirac == 'l' && dir != 'r') || (dirac == 'd' && dir != 'u') || (dirac == 'r' && dir != 'l'))
 			miSerpiente.setDireccion(dir);
@@ -279,7 +280,7 @@ public class Juego {
 	}
 	
 	public void start() {
-		Thread t1 = new Thread(miReloj);
+		t1 = new Thread(miReloj);
 		t1.start();
 	}
 	
