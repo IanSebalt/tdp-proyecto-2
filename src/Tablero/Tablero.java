@@ -189,14 +189,12 @@ public class Tablero{
 	public void intercambiarBloque(Coordenada c1, Coordenada c2) {
 		Bloque aux = null;
 		aux = matriz[c1.getX()][c1.getY()];
-		System.out.println(matriz[c1.getX()][c1.getY()].getBloqueGrafico().getImagen());
 		matriz[c1.getX()][c1.getY()] = matriz[c2.getX()][c2.getY()];
 		matriz[c1.getX()][c1.getY()].getCoord().setX(c1.getX());
 		matriz[c1.getX()][c1.getY()].getCoord().setY(c1.getY());
 		matriz[c2.getX()][c2.getY()] = aux;
 		matriz[c2.getX()][c2.getY()].getCoord().setX(c2.getX());
 		matriz[c2.getX()][c2.getY()].getCoord().setY(c2.getY());
-		System.out.println(matriz[c1.getX()][c1.getY()].getBloqueGrafico().getImagen());
 		miJuego.actualizarVentana(c1);
 		miJuego.actualizarVentana(c2);
 	}

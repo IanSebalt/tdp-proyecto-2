@@ -5,10 +5,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import Tablero.*;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,13 +17,6 @@ import javax.swing.ImageIcon;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import javax.swing.AbstractAction;
-import java.awt.event.*;
-import java.awt.BorderLayout;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyledDocument;
 import javax.swing.JTextArea;
 
 public class Ventana {
@@ -92,7 +83,7 @@ public class Ventana {
 		btnJugar.setBounds(374, 215, 89, 23);
 		btnJugar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jugadorActual = pedirNombre();
+				miJuego.crearJugador();
 				funcionJugar();
 			}
 		});
@@ -161,7 +152,7 @@ public class Ventana {
 		String nombre = JOptionPane.showInputDialog(frame, "Ingresa tu nombre (máx. 30): ", null);
 		if(nombre.length() == 0 || nombre.length() > 30)
 			nombre = JOptionPane.showInputDialog(frame, "Ingresa un nombre válido (máx. 30): ", null);
-		return "";
+		return nombre;
 	}
 	
 	public void mostrarRanking() {
@@ -169,7 +160,7 @@ public class Ventana {
 		int count = 0;
 		for(Jugador j : jugadores) {
 			count++;
-			textoRanking.append("TOP "+count+": "+j.getNombre()+"\n");
+			textoRanking.append("TOP "+count+": "+j.getNombre()+" "+ j.getPuntos() +"\n");
 		}
 	}
 	
@@ -187,7 +178,6 @@ public class Ventana {
 			labels[cord.getX()][cord.getY()].setIcon(img);
 			labels[cord.getX()][cord.getY()].repaint();
 			panelJuego.repaint();
-			System.out.println("actualiza coordenada"+cord.getX()+" "+cord.getY());
 		}
 	}
 	
@@ -221,6 +211,7 @@ public class Ventana {
 		miJuego.getReloj().finish();
 		abrirMenu();
 		JOptionPane.showMessageDialog(null, "¡Termino la partida! Obtuviste "+miJuego.getPuntaje()+" puntos.", "Partida finalizada.", JOptionPane.INFORMATION_MESSAGE);
+		textoRanking.setText(null);
 		mostrarRanking();
 	}
 

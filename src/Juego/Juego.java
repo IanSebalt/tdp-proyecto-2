@@ -48,6 +48,8 @@ public class Juego {
 	}
 	
 	public void gameOver() {
+		miJugador.sumarPuntos(puntajeActual);
+		modificarRanking(miJugador);
 		miVentana.terminarPartida();
 	}
 	
@@ -265,7 +267,6 @@ public class Juego {
 	 * @param lvl - nivel de juego.
 	 */
 	private void crearTextoNivel(String path) {
-		System.out.println("LLego");
 		File nivel = new File(path);
 		try {
 			FileWriter writer = new FileWriter(nivel);
