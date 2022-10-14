@@ -127,4 +127,12 @@ public class Tablero implements VisitorBloque{
 	public Bloque[][] getMatriz(){
 		return matriz;
 	}
+	
+	public int getAlimento() {
+		return comida;
+	}
+	
+	public int getPowerUp() {
+		return powerUp;
+	}
 }

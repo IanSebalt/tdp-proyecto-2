@@ -1,6 +1,18 @@
 package Juego;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 import GUI.Ventana;
+import ManejoArchivos.manejoArchivo;
 import Tablero.*;
 
 public class Juego {
@@ -10,12 +22,14 @@ public class Juego {
 	protected Jugador miJugador;
 	protected Ventana miVentana;
 	protected Tablero miTablero;
+	protected Serpiente miSerpiente;
 	
-	public Juego(Ventana v, Reloj r) {
-		miReloj = r;
+	public Juego(Ventana v) {
+		miReloj = new Reloj(this);
 		miVentana = v;
 		puntajeActual = 0;
 		miJugador = null;
+		miSerpiente = null;
 	}
 	
 	public void iniciarJuego(int largo, int ancho) {
@@ -37,7 +51,7 @@ public class Juego {
 	
 	
 	/**
-	 * Método crear jugador con el nombre recibido por la ventana y que se le asigna una puntuación inicial.
+	 * Método que crea jugador con el nombre recibido por la ventana y que se le asigna la puntuación lograda.
 	 */
 	public void crearJugador() {
 		String nombre = miVentana.pedirNombre();
@@ -45,23 +59,119 @@ public class Juego {
 		miJugador.sumarPuntos(puntajeActual);
 	}
 	
+	/**
+	 * Método que modifica el ranking de mejores jugadores y coloca al jugador recibido por parámetro
+	 * en el top si supera a alguno de los jugadores del ranking.
+	 * @param j - jugador nuevo a insertar en el ranking.
+	 */
 	private void modificarRanking(Jugador j) {
-		//TODO: Implementar.
+		File ranking = new File("Ranking.txt");
+		manejoArchivo manejo = new manejoArchivo();
+		if(ranking.exists()&&ranking.length()>0) {
+			try {
+				Ranking rank = manejo.leer(ranking.getPath());
+				rank.insertarJugador(j);
+				manejo.escribir(rank, ranking.getPath());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else {
+			try {
+				ranking.createNewFile();
+				Ranking rank = new Ranking(5);
+				rank.insertarJugador(j);
+				manejo.escribir(rank, ranking.getPath());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	
 	public void generarNivel(int nivel) {
-		Coordenada paredes [] = null;
+		Coordenada paredes [] = new Coordenada[50];
 		int powerUps = 0;
 		int Alimentos = 0;
-		//TODO: Implementar carga nivel mediante la lectura de un archivo de texto.
+		int contador = 0;
+		File level = new File("Nivel"+ nivel + ".txt");
+		try {
+			if(!level.createNewFile()&&level.length()==0)
+				crearTextoNivel(level.getPath(), nivel);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String linea = "";
+		Scanner scan;
+		String arreglo_Ignore [] = {"Nivel","PowerUps=","Comidas=","Paredes="};
+		int cursor = 0;
+		int cantElementos = 0;
+		BufferedReader lector = null;
+		try {
+			lector = new BufferedReader(new InputStreamReader(new FileInputStream(level.getPath())));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			while((linea=lector.readLine())!=null) {
+				System.out.println(linea);
+				scan = new Scanner(linea.split(arreglo_Ignore[cursor])[1]);
+				cursor++;
+				System.out.println(scan.hasNextInt());
+				while(scan.hasNextInt())
+					if(contador==1) 
+						powerUps = scan.nextInt();				
+					else
+						if(contador==2)
+							Alimentos = scan.nextInt();
+						else
+							if(contador>2) {
+								paredes[cantElementos] = new Coordenada((scan.nextInt()),1);
+								if(scan.hasNext())
+									paredes[cantElementos].setY(scan.nextInt());
+							cantElementos++;
+							}
+				contador++;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Coordenada pa [] = new Coordenada [cantElementos];
+		for(int i=0; i<cantElementos;i++)
+			pa[i] = paredes[i];
+		paredes = pa;
+		for(Coordenada c : paredes)
+			System.out.println("asd" + c.getX() + " " + c.getY());		
 		miTablero.establecerComida(Alimentos);
 		miTablero.establecerPowerUp(powerUps);
 		miTablero.generarParedes(paredes);
 	}
 	
+	
+	/**
+	 * Método que retorna un arreglo con el ranking de los mejores jugadores en cuanto a su puntuación.
+	 * @return los mejores jugadores.
+	 */
 	public Jugador[] darRanking() {
-		//TODO: Implementar.
-		return new Jugador[0];
+		manejoArchivo manejo = new manejoArchivo();
+		File ranking = new File("Ranking.txt");
+		Ranking rank = new Ranking(5);
+		Jugador [] top5 = null;		
+		if(ranking.exists()&&ranking.length()>0)
+			try {
+				rank = manejo.leer(ranking.getPath());
+				top5 = rank.ranking();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		else
+			try {
+				ranking.createNewFile();
+				manejo.escribir(new Ranking(5), ranking.getPath());
+				top5 = manejo.leer(ranking.getPath()).ranking();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+		return top5;
 	}
 	
 	public void cambiarNivel() {
@@ -79,4 +189,28 @@ public class Juego {
 	public Bloque[][] getTablero(){
 		return miTablero.getMatriz();
 	}
+	
+	//Verificar que sucede cuando no hay mas comidas almacenadas pero algunas se encuentras dentro del tablero sin consumirse.
+	public boolean checkConsumibles() {
+		return miTablero.getAlimento()>0 || miTablero.getPowerUp()>0;
+	}
+		
+	//Método que escribe los niveles en un archivo de texo.		
+	private static void crearTextoNivel(String path, int lvl) {
+		System.out.println("LLego");
+		File nivel = new File(path);
+		try {
+			FileWriter writer = new FileWriter(nivel);
+			BufferedWriter escritor = new BufferedWriter(writer);
+			PrintWriter pw = new PrintWriter(escritor);
+			pw.write("Nivel "+lvl+":");
+			pw.write("\nPowerUps= 0");
+			pw.write("\nComidas= 0");
+			pw.write("\nParedes= 10 11 12 13 14 12 1 2 1");
+			pw.close();
+			escritor.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}				
 }

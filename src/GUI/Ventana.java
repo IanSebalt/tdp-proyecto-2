@@ -34,6 +34,9 @@ public class Ventana {
 	protected static final int pixelAncho = 26;
 	protected static final int pixelLargo = 19;
 	
+	//PRUEBA
+	protected Reloj re;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -97,7 +100,7 @@ public class Ventana {
 	}
 	
 	public void iniciarNivel() {
-		//miJuego = new Juego(this, new Reloj());
+		//miJuego = new Juego(this);
 		//miJuego.iniciarJuego(largo, ancho);
 		//Bloque[][] tablero = miJuego.getTablero();
 		Coordenada posIni = new Coordenada(15, 15);
