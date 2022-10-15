@@ -2,13 +2,11 @@ package Juego;
 
 public class Reloj implements Runnable{
 	
-	protected int segundos;
 	protected boolean continuar;
 	protected Juego miJuego;
 	
 	public Reloj(Juego mJ) {
 		miJuego = mJ;
-		segundos = 0;
 		continuar = true;
 	}
 	
@@ -19,7 +17,6 @@ public class Reloj implements Runnable{
 		while(continuar){
 			try {
 				Thread.sleep(200);
-				segundos++;
 				actualizarTablero();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -37,10 +34,6 @@ public class Reloj implements Runnable{
 			miJuego.cambiarNivel(miJuego.getNivel());
 			miJuego.generarConsumible();
 		}
-	}
-	
-	public void actualizarTiempo() {
-		//TODO: Implementar.
 	}
 	
 	public void finish() {
