@@ -1,4 +1,4 @@
 Nivel 1:
 PowerUps= 2
-Comidas= 0
-Paredes= 0
+Comidas= 2
+Paredes= 4 4 4 5 4 6 4 7

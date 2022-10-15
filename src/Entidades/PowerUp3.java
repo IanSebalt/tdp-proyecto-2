@@ -7,10 +7,8 @@ public class PowerUp3 extends PowerUp{
 	public PowerUp3() {
 		incrementarTamaño = 3;
 		puntaje = 75;
-		arrEstetica = new String[2];
-		arrEstetica[0] = "/imagenes/azul.png";
-		arrEstetica[1] = "/imagenes/azul.png";
-		img = "/imagenes/azul.png";
+		estetica = "/imagenes/cuerpo_amarillo.png";
+		img = "/imagenes/PowerUp_3.png";
 	}
 	
 	public void accept(VisitorEntidad v) {

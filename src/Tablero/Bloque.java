@@ -14,8 +14,9 @@ public  class Bloque {
 		transitable = t;
 		miBloqueGrafico = new BloqueGrafico();
 		if(transitable)
-			miBloqueGrafico.cambiarImagen("/imagenes/cuadverde.png");
-		else miBloqueGrafico.cambiarImagen("/imagenes/intr.png");
+			miBloqueGrafico.setImagen("/imagenes/cuadverde.png");
+		else 
+			miBloqueGrafico.setImagen("/imagenes/cuerpo_negro.png");
 		miEntidad = null;
 	}
 	
@@ -42,8 +43,8 @@ public  class Bloque {
 	public void setEntidad(Entidad e) {
 		miEntidad = e;
 		if(e != null)
-			miBloqueGrafico.cambiarImagen(e.getImg());
-		else miBloqueGrafico.cambiarImagen("/imagenes/cuadverde.png");
+			miBloqueGrafico.setImagen(e.getImg());
+		else miBloqueGrafico.setImagen("/imagenes/cuadverde.png");
 		
 	}
 	

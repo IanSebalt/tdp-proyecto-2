@@ -65,6 +65,7 @@ public class Juego {
 	
 	public void generarConsumible(){
 		miTablero.generarPowerUp();
+		miTablero.generarAlimento();
 	}
 	
 	

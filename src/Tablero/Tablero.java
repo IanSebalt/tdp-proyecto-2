@@ -70,44 +70,48 @@ public class Tablero{
 	}
 	
 	public void generarAlimento() {
-		int randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
-		int randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
-		while(!matriz[randomX][randomY].getTransitable()) {
-			randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
-			randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+		if( comida > 0 ) {
+			int randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
+			int randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+			while(!matriz[randomX][randomY].getTransitable()) {
+				randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
+				randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+			}
+			int randomA = ThreadLocalRandom.current().nextInt(1, 6);
+			Entidad e;
+			if(randomA == 1)
+				e = new Banana();
+			else if(randomA == 2)
+					 e = new Manzana();
+				 else if(randomA == 3)
+					 	  e = new Naranja();
+				 	  else if(randomA == 4)
+				 		  	   e = new Pera();
+				 	  	   else e = new Sandia(); 
+			matriz[randomX][randomY].setEntidad(e);
+			miJuego.actualizarVentana(new Coordenada(randomX, randomY));
 		}
-		int randomA = ThreadLocalRandom.current().nextInt(1, 6);
-		Entidad e;
-		if(randomA == 1)
-			e = new Banana();
-		else if(randomA == 2)
-				 e = new Manzana();
-			 else if(randomA == 3)
-				 	  e = new Naranja();
-			 	  else if(randomA == 4)
-			 		  	   e = new Pera();
-			 	  	   else e = new Sandia(); 
-		matriz[randomX][randomY].setEntidad(e);
-		miJuego.actualizarVentana(new Coordenada(randomX, randomY));
 	}
 	
 	public void generarPowerUp() {
-		int randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
-		int randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
-		while(!matriz[randomX][randomY].getTransitable()) {
-			randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
-			randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+		if( powerUp > 0) {
+			int randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
+			int randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+			while(!matriz[randomX][randomY].getTransitable()) {
+				randomX = ThreadLocalRandom.current().nextInt(1, cantColumnas - 1);
+				randomY = ThreadLocalRandom.current().nextInt(1, cantFilas - 1);
+			}
+			int randomA = ThreadLocalRandom.current().nextInt(1, 4);
+			Entidad e;
+			if(randomA == 1)
+				e = new PowerUp1();
+			else if(randomA == 2)
+					 e = new PowerUp2();
+				 else e = new PowerUp3();
+			matriz[randomX][randomY].setEntidad(e);
+			matriz[randomX][randomY].getBloqueGrafico().setImagen(e.getImg());
+			miJuego.actualizarVentana(new Coordenada(randomX, randomY));
 		}
-		int randomA = ThreadLocalRandom.current().nextInt(1, 4);
-		Entidad e;
-		if(randomA == 1)
-			e = new PowerUp1();
-		else if(randomA == 2)
-				 e = new PowerUp2();
-			 else e = new PowerUp3();
-		matriz[randomX][randomY].setEntidad(e);
-		matriz[randomX][randomY].getBloqueGrafico().cambiarImagen(e.getImg());
-		miJuego.actualizarVentana(new Coordenada(randomX, randomY));
 	}
 	
 	/**

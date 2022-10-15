@@ -5,12 +5,12 @@ import Tablero.VisitorEntidad;
 public abstract class PowerUp extends Entidad{
 	protected int incrementarTamaño;
 	protected int puntaje;
-	protected String[] arrEstetica;
+	protected String estetica;
 	
 	abstract public void accept(VisitorEntidad v);
 
-	public String[] modificarEstetica() {
-		return arrEstetica; 
+	public String modificarEstetica() {
+		return estetica; 
 	}
 	
 	public int getPuntaje() {

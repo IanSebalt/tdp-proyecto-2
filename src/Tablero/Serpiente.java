@@ -41,6 +41,7 @@ public class Serpiente implements VisitorEntidad{
 			cuerpo.addLast(bloqueNuevo);
 			miTablero.getMatriz()[corX][corY] = bloqueNuevo;
 		}
+		cuerpo.getFirst().getBloqueGrafico().setImagen("/imagenes/cuerpo_negro.png");
 		aCrecer = 0;
 		direccion = 'r';
 	}
@@ -62,42 +63,38 @@ public class Serpiente implements VisitorEntidad{
 			if(d == 'l') {
 				Coordenada nuevaCoord = new Coordenada(cabeza().getCoord().getX(), cabeza().getCoord().getY() - 1);
 				Bloque nuevaCab = new Bloque(nuevaCoord.getX(), nuevaCoord.getY(), false);
-				BloqueGrafico aux = cuerpo.getLast().getBloqueGrafico();
+				BloqueGrafico aux = cabeza().getBloqueGrafico();
 				e = miTablero.hayEntidad(nuevaCoord);
-				nuevaCab.setBloqueGrafico(cabeza().getBloqueGrafico());
-				cabeza().setBloqueGrafico(aux);
-				interactuarEntidad(e, miTablero.getBloque(nuevaCoord));
+				nuevaCab.setBloqueGrafico(aux);
 				miTablero.setBloque(nuevaCab.getCoord(), nuevaCab);
+				interactuarEntidad(e, miTablero.getBloque(nuevaCoord));
 				cuerpo.addFirst(nuevaCab);
 			} else if(d == 'u') {
 				Coordenada nuevaCoord = new Coordenada(cabeza().getCoord().getX() - 1, cabeza().getCoord().getY());
 				Bloque nuevaCab = new Bloque(nuevaCoord.getX(), nuevaCoord.getY(), false);
-				BloqueGrafico aux = cuerpo.getLast().getBloqueGrafico();
+				BloqueGrafico aux = cabeza().getBloqueGrafico();	
 				e = miTablero.hayEntidad(nuevaCoord);
-				nuevaCab.setBloqueGrafico(cabeza().getBloqueGrafico());
-				cabeza().setBloqueGrafico(aux);
+				nuevaCab.setBloqueGrafico(aux);
+				miTablero.setBloque(nuevaCab.getCoord(), nuevaCab);				
 				interactuarEntidad(e, miTablero.getBloque(nuevaCoord));
-				miTablero.setBloque(nuevaCab.getCoord(), nuevaCab);
 				cuerpo.addFirst(nuevaCab);
 			} else if(d == 'd') {
 				Coordenada nuevaCoord = new Coordenada(cabeza().getCoord().getX() + 1, cabeza().getCoord().getY());
 				Bloque nuevaCab = new Bloque(nuevaCoord.getX(), nuevaCoord.getY(), false);
-				BloqueGrafico aux = cuerpo.getLast().getBloqueGrafico();
+				BloqueGrafico aux = cabeza().getBloqueGrafico();
 				e = miTablero.hayEntidad(nuevaCoord);
-				nuevaCab.setBloqueGrafico(cabeza().getBloqueGrafico());
-				cabeza().setBloqueGrafico(aux);
+				nuevaCab.setBloqueGrafico(aux);
+				miTablero.setBloque(nuevaCab.getCoord(), nuevaCab);		
 				interactuarEntidad(e, miTablero.getBloque(nuevaCoord));
-				miTablero.setBloque(nuevaCab.getCoord(), nuevaCab);
 				cuerpo.addFirst(nuevaCab);
 			} else if(d == 'r') {
 				Coordenada nuevaCoord = new Coordenada(cabeza().getCoord().getX(), cabeza().getCoord().getY() + 1);
 				Bloque nuevaCab = new Bloque(nuevaCoord.getX(), nuevaCoord.getY(), false);
-				BloqueGrafico aux = cuerpo.getLast().getBloqueGrafico();
+				BloqueGrafico aux = cabeza().getBloqueGrafico();	
 				e = miTablero.hayEntidad(nuevaCoord);
-				nuevaCab.setBloqueGrafico(cabeza().getBloqueGrafico());
-				cabeza().setBloqueGrafico(aux);
+				nuevaCab.setBloqueGrafico(aux);
+				miTablero.setBloque(nuevaCab.getCoord(), nuevaCab);		
 				interactuarEntidad(e, miTablero.getBloque(nuevaCoord));
-				miTablero.setBloque(nuevaCab.getCoord(), nuevaCab);
 				cuerpo.addFirst(nuevaCab);
 			}
 			aCrecer--;
@@ -112,6 +109,7 @@ public class Serpiente implements VisitorEntidad{
 			cuerpo.addFirst(nuevaCab);
 			Entidad e = null;
 			Coordenada aux = new Coordenada(nuevaCab.getCoord().getX(), nuevaCab.getCoord().getY());
+			
 			if(d == 'l') {
 				nuevaCab.getCoord().setY(cabezaAnt.getCoord().getY() - 1);
 				nuevaCab.getCoord().setX(cabezaAnt.getCoord().getX());
@@ -133,9 +131,7 @@ public class Serpiente implements VisitorEntidad{
 				e = miTablero.hayEntidad(nuevaCab.getCoord());
 				interactuarEntidad(e, miTablero.getBloque(nuevaCab.getCoord()));
 			}
-			BloqueGrafico bg = nuevaCab.getBloqueGrafico();
 			nuevaCab.setBloqueGrafico(cabezaAnt.getBloqueGrafico());
-			cabezaAnt.setBloqueGrafico(bg);
 			miTablero.intercambiarBloque(aux, nuevaCab.getCoord());
 		}				
 	}
@@ -147,17 +143,17 @@ public class Serpiente implements VisitorEntidad{
 	@Override
 	public void chocar(PowerUp p) {
 		miTablero.IncrementarPuntaje(p.getPuntaje());
-		BloqueGrafico cabezaGraf = cabeza().getBloqueGrafico();
-		String[] arr = p.modificarEstetica();
-		cabezaGraf.cambiarImagen(arr[0]);
+		String str = p.modificarEstetica();
+		miTablero.setBloque(cabeza().getCoord(), cabeza());
 		miTablero.decrementarPowerUp();
 		Iterator<Bloque> it = cuerpo.iterator();
-		it.next();
 		while(it.hasNext()) {
 			Bloque aux = it.next();
-			aux.getBloqueGrafico().cambiarImagen(arr[1]);
-		}	
-		aCrecer += p.getIncrementarTamaño();	
+			aux.getBloqueGrafico().setImagen(str);
+			miTablero.setBloque(aux.getCoord(), aux);
+		}
+		aCrecer += p.getIncrementarTamaño();
+		miTablero.generarPowerUp();
 	}	
 	
 	public void setDireccion(char c) {
@@ -172,14 +168,16 @@ public class Serpiente implements VisitorEntidad{
 	public void chocar(Comida c) {
 		miTablero.IncrementarPuntaje(c.getPuntaje());
 		miTablero.decrementarComida();
-		aCrecer += c.getIncrementarTamaño();	
+		aCrecer += c.getIncrementarTamaño();
+		miTablero.generarAlimento();
 	}
 	
 	public void interactuarEntidad(Entidad e, Bloque b) {
 		if(e != null) {
 			e.accept(this);
 			miTablero.setBloque(b.getCoord(), new Bloque(b.getCoord().getX(), b.getCoord().getY(), true));
-			miTablero.generarPowerUp();
 		}
 	}
+	
+	
 }
