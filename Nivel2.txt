@@ -1,4 +1,4 @@
 Nivel 2:
-PowerUps= 2
-Comidas= 2
-Paredes= 0
+PowerUps= 6
+Comidas= 10
+Paredes= 8 8 8 9 8 10 4 7 14 13 9 12 20 20 20 19 20 18 15 15

@@ -3,6 +3,7 @@ package GUI;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import Tablero.*;
@@ -18,6 +19,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.JTextArea;
+import javax.swing.Timer;
 
 public class Ventana {
 	
@@ -32,6 +34,9 @@ public class Ventana {
 	protected JPanel panelRanking;
 	protected JTextArea textoRanking;
 	protected Thread t1;
+	protected JLabel puntaje;
+    protected JLabel tiempo;
+    protected int cronometro;
 	protected static final int largo = 32;
 	protected static final int ancho = 32;
 	protected static final int pixelAncho = 26;
@@ -116,37 +121,69 @@ public class Ventana {
 	}
 	
 	public void iniciarNivel() {
-		miJuego.iniciarJuego(largo, ancho);
-		Bloque[][] tablero = miJuego.getTablero();
-		labels = new JLabel[largo][ancho];
-		for(int i = 0; i < largo; i++)
-			for(int j = 0; j < ancho; j++) {
-				JLabel label = new JLabel();
-				labels[i][j] = label;
-				ImageIcon img = new ImageIcon(getClass().getResource(tablero[i][j].getBloqueGrafico().getImagen()));
-				label.setSize(pixelAncho, pixelLargo);
-				reDimensionar(label, img);
-				label.setIcon(img);
-				panelJuego.add(label);
-			}
-		//Damos tiempo para la carga del juego.
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		t1 = new Thread(miJuego.getReloj());
-		t1.start();
-		miJuego.generarConsumible();
-	}
+        miJuego.iniciarJuego(largo, ancho);
+        Bloque[][] tablero = miJuego.getTablero();
+        labels = new JLabel[largo][ancho];
+        for(int i = 0; i < largo; i++)
+            for(int j = 0; j < ancho; j++) {
+                if((i != 0 || j != 0) && (i != 0 || j != 1)) {
+                    JLabel label = new JLabel();
+                    labels[i][j] = label;
+                    ImageIcon img = new ImageIcon(getClass().getResource(tablero[i][j].getBloqueGrafico().getImagen()));
+                    label.setSize(pixelAncho, pixelLargo);
+                    reDimensionar(label, img);
+                    label.setIcon(img);
+                    panelJuego.add(label);
+                }
+                else {
+                    labels[0][0] = tiempo;
+                    labels[0][1] = puntaje;
+                }
+            }
+        //Damos tiempo para la carga del juego.
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        t1 = new Thread(miJuego.getReloj());
+        t1.start();
+        miJuego.generarConsumible();
+
+    }
 	
 	private void funcionJugar() {
-		panelMain.removeAll();
-		iniciarNivel();
-		panelMain.add(panelJuego);
-		panelMain.repaint();
-		panelMain.revalidate();
-	}
+        panelMain.removeAll();
+        cronometro = 0;
+        tiempo = new JLabel();
+        puntaje = new JLabel();
+        panelJuego.add(tiempo);
+        panelJuego.add(puntaje);
+        puntaje.setFont(new Font("Serif", Font.PLAIN, 9));
+        tiempo.setFont(new Font("Serif", Font.PLAIN, 9));
+        Timer timer = new Timer(1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cronometro++;
+                tiempo.setText(formatearTiempo(cronometro));
+                tiempo.repaint();
+                puntaje.setText("P:"+miJuego.getPuntaje());
+            }
+        });
+        timer.start();
+        tiempo.setSize(pixelAncho, pixelLargo);
+        iniciarNivel();
+        labels[0][0].repaint();
+        labels[0][1].repaint();
+        panelMain.add(panelJuego);
+        panelMain.repaint();
+        panelMain.revalidate();
+    }
+    
+    private String formatearTiempo(int crono) {
+        int minutos = (crono / 60) % 60;
+        int segundos = crono % 60;
+        return minutos+":"+segundos;
+    }
 	
 	public String pedirNombre() {
 		String nombre = JOptionPane.showInputDialog(frame, "Ingresa tu nombre (máx. 30): ", null);

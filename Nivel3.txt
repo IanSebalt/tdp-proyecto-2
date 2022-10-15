@@ -1,4 +1,4 @@
 Nivel 3:
-PowerUps= 2
-Comidas= 0
-Paredes= 0
+PowerUps= 9
+Comidas= 15
+Paredes= 12 14 15 6 17 12 2 13 12 13 12 11 17 11 17 10 6 8 21 12 2 29 29 29 28
